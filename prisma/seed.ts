@@ -3,67 +3,38 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 async function main() {
-    console.log("🌱 Seeding database...")
-
-    // 🔹 CATEGORY
-    const categories = await prisma.category.createMany({
-        data: [
-            { name: "T-Shirt" },
-            { name: "Hoodie" },
-            { name: "Accessories" },
-        ],
-        skipDuplicates: true,
+    const category = await prisma.category.upsert({
+        where: { name: "T-Shirt" },
+        update: {},
+        create: { name: "T-Shirt" },
     })
 
-    const allCategories = await prisma.category.findMany()
-
-    // 🔹 PRODUCT
     await prisma.product.createMany({
         data: [
             {
                 name: "Black Angel T-Shirt",
                 slug: "black-angel-tshirt",
-                description: "Premium cotton T-Shirt",
+                description: "Kaos hitam premium Black Angel",
                 price: 150000,
-                images: JSON.stringify([
-                    "/products/tshirt-1.png",
-                ]),
-                isActive: true,
-                categoryId: allCategories[0].id,
+                images: ["/img/placeholder.jpg"],
+                categoryId: category.id,
             },
             {
-                name: "Black Angel Hoodie",
-                slug: "black-angel-hoodie",
-                description: "Oversized hoodie",
-                price: 350000,
-                images: JSON.stringify([
-                    "/products/hoodie-1.png",
-                ]),
-                isActive: true,
-                categoryId: allCategories[1].id,
-            },
-            {
-                name: "Black Angel Cap",
-                slug: "black-angel-cap",
-                description: "Adjustable cap",
-                price: 100000,
-                images: JSON.stringify([
-                    "/products/cap-1.png",
-                ]),
-                isActive: true,
-                categoryId: allCategories[2].id,
+                name: "White Angel T-Shirt",
+                slug: "white-angel-tshirt",
+                description: "Kaos putih eksklusif Black Angel",
+                price: 145000,
+                images: ["/img/placeholder.jpg"],
+                categoryId: category.id,
             },
         ],
     })
-
-    console.log("✅ Seed selesai")
 }
 
 main()
-    .catch((e) => {
+    .then(() => prisma.$disconnect())
+    .catch(e => {
         console.error(e)
+        prisma.$disconnect()
         process.exit(1)
-    })
-    .finally(async () => {
-        await prisma.$disconnect()
     })

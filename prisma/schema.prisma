@@ -3,9 +3,33 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+
+// model Product {
+//   id          Int      @id @default(autoincrement())
+//   name        String
+//   slug        String   @unique
+//   description String?
+//   price       Int
+//   images      Json
+//   isActive    Boolean  @default(true)
+//   categoryId  Int
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   category    Category @relation(fields: [categoryId], references: [id])
+
+//   @@index([categoryId], map: "Product_categoryId_fkey")
+// }
+
+// model Category {
+//   id        Int       @id @default(autoincrement())
+//   name      String    @unique
+//   createdAt DateTime  @default(now())
+//   products  Product[]
+// }
 
 model Product {
   id          Int      @id @default(autoincrement())
@@ -18,14 +42,14 @@ model Product {
   categoryId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  category    Category @relation(fields: [categoryId], references: [id])
 
-  @@index([categoryId], map: "Product_categoryId_fkey")
+  category Category @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  products  Product[]
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  products Product[]
 }

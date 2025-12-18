@@ -1,9 +1,10 @@
-import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url)
+
         const page = Number(searchParams.get("page") ?? 1)
         const limit = Number(searchParams.get("limit") ?? 8)
         const skip = (page - 1) * limit
@@ -13,8 +14,8 @@ export async function GET(req: Request) {
                 where: { isActive: true },
                 include: { category: true },
                 orderBy: { createdAt: "desc" },
-                take: limit,
                 skip,
+                take: limit,
             }),
             prisma.product.count({
                 where: { isActive: true },
@@ -23,12 +24,16 @@ export async function GET(req: Request) {
 
         return NextResponse.json({
             data: products,
-            total,
-            totalPages: Math.ceil(total / limit),
-            page,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
         })
     } catch (error) {
-        console.error("API /products ERROR 👉", error)
+        console.error("PRODUCT API ERROR:", error)
+
         return NextResponse.json(
             { message: "Internal Server Error" },
             { status: 500 }
