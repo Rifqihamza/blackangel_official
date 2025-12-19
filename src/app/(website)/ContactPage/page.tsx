@@ -3,9 +3,9 @@ import { Send, Mail, MapPin, Phone } from "lucide-react";
 export default function ContactPage() {
     return (
         <section id="contactPage">
-            <div className="container mx-auto px-6 py-10 w-full">
-                <h2 className="text-2xl font-semibold">Reach Us!</h2>
-                <div className="flex flex-col md:flex-row md:gap-8 gap-2 p-6 mt-3 w-full overflow-hidden border border-secondary/20 rounded-xl">
+            <div className="container mx-auto px-6 py-25 w-full">
+                <h2 className="text-primary text-3xl font-semibold text-center tracking-wider uppercase mb-8">Concierge</h2>
+                <div className="flex flex-col md:flex-row md:gap-8 gap-2 p-6 mt-3 w-full overflow-hidden">
                     {/* Left: Form */}
                     <div className="flex-1 py-8">
                         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">

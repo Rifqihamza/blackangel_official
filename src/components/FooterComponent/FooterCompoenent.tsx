@@ -8,14 +8,14 @@ export default function Footer() {
             <div className="flex flex-col md:flex-row gap-10 md:gap-0 justify-between">
                 {/* Title */}
                 <div className="">
-                    <h1 className="font-semibold text-3xl">Black Angel Store</h1>
-                    <p className="text-xl">The Incredible Wear</p>
+                    <h1 className="font-semibold text-3xl text-primary">Black Angel Store</h1>
+                    <p className="text-2xl">The Incredible Wear</p>
                     <p className="text-sm">Find Your Perfect Outfit Now!</p>
                 </div>
                 {/* Social Media */}
-                <div className="flex flex-col gap-1 grayscale md:w-37.5 w-full">
-                    <h1 className="text-xl font-semibold">Social Media</h1>
-                    <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-col gap-1 md:w-37.5 w-full">
+                    <h1 className="text-xl font-semibold text-accent">Social Media</h1>
+                    <div className="flex flex-wrap items-center gap-4 grayscale">
                         <a target="_blank" href="https://www.instagram.com/blackangel.official.id/">
                             <Image src="/icon/instagram.svg" alt="Instagram Icon" width={25} height={25} />
                         </a>
@@ -34,7 +34,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div>
-                    <h1 className="text-xl font-semibold">Quick Menu</h1>
+                    <h1 className="text-xl font-semibold text-accent">Quick Menu</h1>
                     <ul className="font-normal">
                         <li>
                             <a href="#homePage" className="relative group text-lg">
@@ -57,7 +57,7 @@ export default function Footer() {
                     </ul>
                 </div>
                 <div className="flex flex-col gap-2 items-staret">
-                    <h1 className="text-xl font-semibold">Contact</h1>
+                    <h1 className="text-xl font-semibold text-accent">Concierge Service</h1>
                     <ul className="text-sm space-y-4">
                         <li className="flex items-start gap-3">
                             <MapPin size={20} />

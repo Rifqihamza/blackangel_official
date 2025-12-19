@@ -1,6 +1,6 @@
-import HomePage from "./(site)/HomePage/page"
-import ProductPage from "./(site)/ProductPage/page"
-import ContactPage from "./(site)/ContactPage/page"
+import HomePage from "./HomePage/page"
+import ProductPage from "./ProductPage/page"
+import ContactPage from "./ContactPage/page"
 
 export default function App() {
   return (

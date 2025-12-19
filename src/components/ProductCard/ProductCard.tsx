@@ -22,7 +22,7 @@ export default function ProductCard({
     return (
         <Link
             href={`/ProductPage/${product.slug}`}
-            className="bg-white rounded-xl shadow hover:shadow-lg transition p-4"
+            className="bg-white rounded-xl shadow hover:shadow-lg hover:shadow-accent transition p-4"
         >
             <div className="relative h-56 rounded-lg overflow-hidden">
                 <Image
@@ -32,14 +32,15 @@ export default function ProductCard({
                     className="object-cover"
                 />
             </div>
-
-            <h3 className="mt-3 font-semibold">{product.name}</h3>
-            <p className="text-sm text-gray-600 line-clamp-2">
-                {product.description}
-            </p>
-            <p className="mt-2 font-bold">
-                Rp {product.price.toLocaleString("id-ID")}
-            </p>
+            <div className="text-primary">
+                <h3 className="mt-3 font-semibold">{product.name}</h3>
+                <p className="text-sm text-secondary line-clamp-2">
+                    {product.description}
+                </p>
+                <p className="mt-2 font-bold text-secondary">
+                    Rp {product.price.toLocaleString("id-ID")}
+                </p>
+            </div>
         </Link>
     )
 }

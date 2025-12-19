@@ -17,24 +17,24 @@ export default function NavMobileComponent({
             onClick={onClose}
         >
             <aside
-                className={`absolute right-0 top-0 h-screen w-[80%] max-w-sm bg-black
+                className={`absolute right-0 top-0 h-screen w-full bg-primary
                     transform transition-transform duration-300 ease-out
                     ${open ? "translate-x-0" : "translate-x-full"}
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="relative flex h-full flex-col p-8">
+                <div className="relative flex h-full w-full flex-col py-10 px-8">
                     {/* Close Button */}
                     <button
                         onClick={onClose}
-                        className="absolute right-4 top-6 rounded-full p-2 text-white transition hover:bg-gray-100 hover:text-black"
+                        className="absolute right-4 top-8 rounded-full p-2 text-white transition hover:bg-gray-100 hover:text-black"
                         aria-label="Close menu"
                     >
                         <X size={30} />
                     </button>
 
                     {/* Title */}
-                    <div className="flex items-center gap-2 md:w-1/3 w-full">
+                    <div className="flex items-center gap-3 md:w-1/3 w-full">
                         <Image
                             src="/img/blackangel_icon.jpg"
                             alt="Icon Black Angel"
@@ -42,7 +42,7 @@ export default function NavMobileComponent({
                             height={40}
                             className="rounded-full"
                         />
-                        <h1 className="font-thin md:text-3xl text-2xl uppercase tracking-widest font-[SaloonGirls]">
+                        <h1 className="font-thin text-3xl uppercase tracking-widest font-[SaloonGirls] text-white">
                             Black Angel
                         </h1>
                     </div>
@@ -53,15 +53,15 @@ export default function NavMobileComponent({
                             Home
                         </NavItem>
                         <NavItem href="#productPage" onClick={onClose}>
-                            Products
+                            Collection
                         </NavItem>
                         <NavItem href="#contactPage" onClick={onClose}>
-                            Contact
+                            Concierge
                         </NavItem>
                     </nav>
 
                     {/* Footer */}
-                    <div className="mt-auto pt-6 text-sm text-gray-400">
+                    <div className="mt-auto pt-6 text-sm text-gray-400 text-center">
                         © 2025 Black Angel
                     </div>
                 </div>
@@ -85,8 +85,8 @@ function NavItem({
             className="
                 rounded-xl px-4 py-3 text-xl font-medium text-white
                 transition-all duration-200
-                hover:bg-black hover:text-white
-                active:scale-[0.97]
+                hover:bg-secondary hover:text-white
+                active:scale-[0.97] hover:scale-[0.97]
             "
         >
             {children}

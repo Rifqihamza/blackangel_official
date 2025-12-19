@@ -9,8 +9,8 @@ export default function ProductPage() {
     const { products, totalPages, loading } = useProducts(page)
 
     return (
-        <section className="container mx-auto px-6 py-14">
-            <h1 className="text-2xl font-semibold mb-8">Our Products</h1>
+        <section id="productPage" className="container mx-auto px-6 py-25">
+            <h2 className="text-primary text-3xl font-semibold text-center tracking-wider uppercase mb-8">The Collection</h2>
 
             {loading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

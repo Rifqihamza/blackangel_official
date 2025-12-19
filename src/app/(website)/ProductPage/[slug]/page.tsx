@@ -3,14 +3,15 @@
 import useProductSlug from "@/hooks/useProductSlug"
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ShoppingBag } from "lucide-react"
+import ProductDetailSkeleton from "@/components/ProductDetailSkeleton/ProductDetailSkeleton"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
     const router = useRouter()
     const { product, loading, error } = useProductSlug(slug)
 
-    if (loading) return <p className="text-center py-10">Loading...</p>
+    if (loading) return <ProductDetailSkeleton />
     if (error || !product) return <p className="text-center py-10">Product Not Found</p>
 
     const images: string[] = Array.isArray(product.images)
@@ -27,9 +28,9 @@ export default function ProductDetailPage() {
             {/* BACK BUTTON */}
             <button
                 onClick={() => router.push("/")}
-                className="flex items-center gap-2 mb-6 hover:opacity-70 transition"
+                className="cursor-pointer flex items-center gap-2 mb-6 hover:opacity-70 transition"
             >
-                <ArrowLeft size={20} /> Back
+                <ArrowLeft size={20} /> Back Home
             </button>
 
             {/* === GRID PRODUK === */}
@@ -64,24 +65,12 @@ export default function ProductDetailPage() {
                     <p className="text-gray-700 leading-relaxed">
                         {product.description}
                     </p>
-                </div>
-
-                {/* RIGHT: ACTION */}
-                <div className="col-span-1">
-                    <div className="border border-gray-200 rounded-xl shadow-sm w-full max-w-xs p-6 absolute top-0">
-                        <h2 className="text-lg font-semibold mb-4 text-gray-800">
-                            Atur Pembelian
-                        </h2>
-
-                        <div className="flex justify-between text-lg font-semibold mb-6">
-                            <span>Harga</span>
-                            <span>
-                                Rp {product.price.toLocaleString("id-ID")}
-                            </span>
-                        </div>
-
-                        <button className="w-full px-6 py-3 bg-black text-white rounded-lg hover:opacity-90">
-                            Add to Cart
+                    <div className="mt-2">
+                        <button
+                            className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border border-secondary rounded text-secondary hover:text-white hover:bg-secondary duration-300 cursor-pointer"
+                        >
+                            Make It Yours
+                            <ShoppingBag />
                         </button>
                     </div>
                 </div>
