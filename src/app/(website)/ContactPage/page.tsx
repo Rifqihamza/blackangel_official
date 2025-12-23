@@ -4,7 +4,8 @@ export default function ContactPage() {
     return (
         <section id="contactPage">
             <div className="container mx-auto px-6 py-25 w-full">
-                <h2 className="text-primary text-3xl font-semibold text-center tracking-wider uppercase mb-8">Concierge</h2>
+                <h1 className="text-center tracking-wide text-7xl font-semibold Tangerine">
+                    Concierge</h1>
                 <div className="flex flex-col md:flex-row md:gap-8 gap-2 p-6 mt-3 w-full overflow-hidden">
                     {/* Left: Form */}
                     <div className="flex-1 py-8">

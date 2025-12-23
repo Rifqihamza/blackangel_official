@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: autumn --default, autumn --prefersdark;
+  themes: luxury --default, luxury --prefersdark;
 }
 
 @font-face {
@@ -11,6 +11,11 @@
 @font-face {
   font-family: "Poppins";
   src: url("/Poppins.ttf");
+}
+
+@font-face {
+  font-family: "Tangerine";
+  src: url("/Tangerine.ttf");
 }
 
 * {

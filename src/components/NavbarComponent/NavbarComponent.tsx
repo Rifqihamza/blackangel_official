@@ -1,54 +1,63 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Menu } from "lucide-react"
 import NavMobileComponent from "./NavMobileComponent"
-import Image from "next/image"
+
 export default function Navbar() {
     const [open, setOpen] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50)
+        }
+
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [])
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50">
-            <div className="px-6 md:px-0">
-                <div className="max-w-7xl mx-auto py-4 flex items-center justify-between">
+        <header
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
+        ${scrolled ? " shadow-md" : "bg-transparent"}
+      `}
+        >
+            <div className="px-6 md:px-0 ">
+                <div className="mx-auto py-6 px-8 flex items-center justify-between">
                     {/* Logo */}
-                    <div className="flex items-center gap-2 md:w-1/3 w-full">
-                        <Image
-                            src="/img/blackangel_icon.jpg"
-                            alt="Icon Black Angel"
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                        />
-                        <h1 className="font-thin md:text-3xl text-2xl uppercase tracking-[5px] font-[SaloonGirls] text-primary">
-                            Black Angel
-                        </h1>
-                    </div>
+                    <h1
+                        className={`md:text-4xl text-3xl font-[Tangerine] font-medium tracking-widest transition-colors duration-300
+              ${scrolled ? "text-primary" : "text-primary"}
+            `}
+                    >
+                        Black Angel
+                    </h1>
+
                     {/* Desktop Menu */}
-                    <nav className="hidden md:flex items-center gap-8">
-                        <a href="#homePage" className="relative group ">
-                            <h1 className="text-md md:text-lg tracking-wider text-primary group-hover:text-accent duration-300">
-                                Home
-                            </h1>
-                            <span className="absolute -bottom-2 left-0 w-0 h-1 bg-accent group-hover:w-full duration-300"></span>
-                        </a>
-                        <a href="#productPage" className="relative group">
-                            <h1 className="text-md md:text-lg tracking-wider text-primary group-hover:text-accent duration-300">
-                                Collection
-                            </h1>
-                            <span className="absolute -bottom-2 left-0 w-0 h-1 bg-accent group-hover:w-full duration-300"></span>
-                        </a>
-                        <a href="#contactPage" className="relative group">
-                            <h1 className="text-md md:text-lg tracking-wider text-primary group-hover:text-accent duration-300">
-                                Concierge
-                            </h1>
-                            <span className="absolute -bottom-2 left-0 w-0 h-1 bg-accent group-hover:w-full duration-300"></span>
-                        </a>
+                    <nav
+                        className={`hidden md:flex items-center gap-6 transition-colors duration-300
+              ${scrolled ? "text-primary" : "text-primary"}
+            `}
+                    >
+                        {["Home", "Collection", "Concierge"].map((item, i) => (
+                            <a
+                                key={i}
+                                href={`#${item.toLowerCase()}Page`}
+                                className="relative group"
+                            >
+                                <span className="text-md md:text-lg tracking-wider hover:text-accent duration-300">
+                                    {item}
+                                </span>
+                            </a>
+                        ))}
                     </nav>
 
                     {/* Mobile Button */}
                     <button
-                        className="md:hidden btn btn-ghost btn-sm"
+                        className={`md:hidden btn btn-ghost btn-sm transition-colors
+              ${scrolled ? "text-primary" : "text-white"}
+            `}
                         onClick={() => setOpen(true)}
                     >
                         <Menu size={22} />
