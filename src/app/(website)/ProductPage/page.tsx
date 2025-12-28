@@ -3,16 +3,54 @@
 
 import { useState } from "react"
 import useProducts from "@/hooks/useProducts"
+import useCategories from "@/hooks/useCategories"
 import ProductCard from "@/components/ProductCard/ProductCard"
 
 export default function ProductPage() {
     const [page, setPage] = useState(1)
-    const { products, totalPages, loading } = useProducts(page)
+    const [searchTerm, setSearchTerm] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("")
+
+    const { products, totalPages, loading } = useProducts(page, 8, searchTerm, "active", selectedCategory)
+    const { categories } = useCategories()
+
+    const handleSearchChange = (value: string) => {
+        setSearchTerm(value)
+        setPage(1) // Reset to page 1 when search changes
+    }
+
+    const handleCategoryChange = (value: string) => {
+        setSelectedCategory(value)
+        setPage(1) // Reset to page 1 when category changes
+    }
 
     return (
         <section id="collectionPage" className=" mx-auto px-6 py-25">
             <h1 className="text-xl md:text-6xl font-medium font-[Tangerine] text-center mb-8 tracking-wider text-(--primary)">
                 The Collection</h1>
+
+            {/* SEARCH AND FILTER CONTROLS */}
+            <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="flex-1 max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <select
+                    value={selectedCategory}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="">All Categories</option>
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.id.toString()}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {loading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

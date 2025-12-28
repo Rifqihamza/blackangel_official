@@ -8,7 +8,7 @@ export default function Navbar() {
     const [open, setOpen] = useState(false)
 
     return (
-        <header className="w-full max-w-7xl mx-auto rounded-2xl z-50 py-4 px-2 transition-all duration-300">
+        <header className="w-full max-w-7xl mx-auto rounded-2xl z-50 py-4 px-6 transition-all duration-300">
             <div className="flex flex-row-reverse md:flex-row items-center justify-between">
 
                 {/* Left spacer */}

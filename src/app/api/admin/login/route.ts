@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     }
 
     const res = NextResponse.json({ success: true })
+    const isProduction = process.env.NODE_ENV === "production"
 
     res.cookies.set({
         name: "admin_token",
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
         httpOnly: true,
         path: "/",
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        secure: isProduction
     })
 
     return res

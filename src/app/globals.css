@@ -4,10 +4,10 @@
 }
 
 :root {
-  --primary: #72442b; /* lebih deep & elegan (main text / headline) */
-  --secondary: #5a3a28; /* hangat, masih satu keluarga dengan primary */
-  --muted: #a78973; /* muted yang beneran “background-friendly” */
-  --accent: #8f5b3a; /* accent lebih hidup tapi gak terlalu orange */
+  --primary: #6f4e37; /* lebih deep & elegan (main text / headline) */
+  --secondary: #a67b5b; /* hangat, masih satu keluarga dengan primary */
+  --muted: #ecb176; /* muted yang beneran “background-friendly” */
+  --accent: #fed8b1; /* accent lebih hidup tapi gak terlalu orange */
 }
 
 @font-face {

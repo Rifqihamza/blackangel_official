@@ -7,18 +7,42 @@ export async function GET(req: Request) {
 
         const page = Number(searchParams.get("page") ?? 1)
         const limit = Number(searchParams.get("limit") ?? 8)
+        const search = searchParams.get("search") ?? ""
+        const filterActive = searchParams.get("filterActive") ?? "active" // Default to active for public
+        const categoryId = searchParams.get("categoryId") ?? ""
         const skip = (page - 1) * limit
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const where: { [key: string]: any } = {}
+
+        if (search) {
+            where.name = {
+                contains: search,
+                mode: 'insensitive'
+            }
+        }
+
+        if (filterActive === "active") {
+            where.isActive = true
+        } else if (filterActive === "inactive") {
+            where.isActive = false
+        }
+        // For 'all', no isActive filter
+
+        if (categoryId) {
+            where.categoryId = parseInt(categoryId)
+        }
 
         const [products, total] = await Promise.all([
             prisma.product.findMany({
-                where: { isActive: true },
+                where,
                 include: { category: true },
-                orderBy: { createdAt: "desc" },
+                orderBy: { createdAt: "asc" },
                 skip,
                 take: limit,
             }),
             prisma.product.count({
-                where: { isActive: true },
+                where,
             }),
         ])
 

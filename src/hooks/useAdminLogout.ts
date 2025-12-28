@@ -1,9 +1,10 @@
 "use client"
 
+import { signOut } from "next-auth/react"
+
 export function useAdminLogout() {
     const logout = async () => {
-        await fetch("/api/admin/logout", { method: "POST" })
-        window.location.href = "/dashboard/login"
+        await signOut({ callbackUrl: "/dashboard/login" })
     }
 
     return { logout }

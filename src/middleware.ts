@@ -1,23 +1,33 @@
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default function middleware(req: NextRequest) {
-    const res = NextResponse.next();
+export async function middleware(req: NextRequest) {
+    const { pathname } = req.nextUrl;
 
-    if (req.nextUrl.pathname.startsWith("/dashboard") && req.nextUrl.pathname !== "/dashboard/login") {
-        const adminKey = req.cookies.get("admin_token")?.value;
-
-        if (!adminKey) {
-            return NextResponse.redirect(new URL("/dashboard/login", req.url));
-        }
-
-        // Set header to indicate dashboard
-        res.headers.set("x-is-dashboard", "true");
+    // Jangan proteksi assets/public
+    if (pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico")) {
+        return NextResponse.next();
     }
 
-    return res;
+    // Ambil token dari NextAuth JWT
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    // Proteksi dashboard kecuali login
+    if (pathname.startsWith("/dashboard") && pathname !== "/dashboard/login") {
+        if (!token || token.role !== "ADMIN") {
+            return NextResponse.redirect(new URL("/dashboard/login", req.url));
+        }
+    }
+
+    // Redirect jika sudah login ke login page
+    if (pathname === "/dashboard/login" && token?.role === "ADMIN") {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]
-}
+    matcher: ["/dashboard/:path*"],
+};

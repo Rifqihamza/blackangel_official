@@ -1,43 +1,41 @@
-"use client"
-
-import { useState } from "react"
+'use client'
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function useAdminLogin() {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
 
     const login = async (email: string, password: string) => {
-        setLoading(true)
-        setError(null)
+        setLoading(true);
+        setError(null);
 
-        try {
-            const res = await fetch("/api/admin/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }),
-            })
+        const res = await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+        });
 
-            if (!res.ok) {
-                const data = await res.json()
-                setError(data.message || "Login failed")
-                setLoading(false)
-                return false
-            }
+        setLoading(false);
 
-            window.location.href = "/dashboard"
-            return true
-        } catch (err) {
-            setError("Network error")
-            setLoading(false)
-            return false
+        if (!res || res.error) {
+            setError("Email atau password salah");
+            return false;
         }
-    }
 
-    return {
-        login,
-        loading,
-        error,
-    }
+        // redirect jika role ADMIN
+        const tokenRes = await fetch("/api/auth/session");
+        const session = await tokenRes.json();
+        if (session?.user?.role === "ADMIN") {
+            router.replace("/dashboard");
+            return true;
+        }
+
+        setError("Anda bukan admin");
+        return false;
+    };
+
+    return { login, loading, error };
 }
