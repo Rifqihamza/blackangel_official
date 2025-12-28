@@ -4,7 +4,7 @@ import ContactPage from "./ContactPage/page"
 
 export default function App() {
   return (
-    <main>
+    <main className="w-full max-w-7xl mx-auto">
       <HomePage />
       <ProductPage />
       <ContactPage />

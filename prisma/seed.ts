@@ -4,8 +4,9 @@ import bcrypt from "bcrypt"
 const prisma = new PrismaClient()
 
 async function main() {
-    // Create admin user
+    // ===== ADMIN USER =====
     const hashedPassword = await bcrypt.hash("1tm1tr4101101", 10)
+
     await prisma.users.upsert({
         where: { email: "admin@blackangel.com" },
         update: {},
@@ -17,43 +18,59 @@ async function main() {
         },
     })
 
-    const category = await prisma.category.upsert({
-        where: { name: "T-Shirt" },
-        update: {},
-        create: { name: "T-Shirt" },
+    // ===== CATEGORIES =====
+    const categories = await Promise.all(
+        ["T-Shirt", "Jacket", "Hoodie", "Pants"].map(name =>
+            prisma.category.upsert({
+                where: { name },
+                update: {},
+                create: { name },
+            })
+        )
+    )
+
+    // Helper
+    const getCategoryId = (name: string) =>
+        categories.find(c => c.name === name)!.id
+
+    // ===== PRODUCTS DATA (50 ITEMS) =====
+    const products = Array.from({ length: 50 }).map((_, i) => {
+        const index = i + 1
+        const category =
+            i % 4 === 0 ? "T-Shirt" :
+                i % 4 === 1 ? "Jacket" :
+                    i % 4 === 2 ? "Hoodie" :
+                        "Pants"
+
+        return {
+            name: `Black Angel ${category} ${index}`,
+            slug: `black-angel-${category.toLowerCase()}-${index}`,
+            description: `Premium ${category.toLowerCase()} Black Angel edition ${index}`,
+            price: 120000 + (i * 5000),
+            images: [
+                `/img/${category.toLowerCase()}.png`,
+                `/img/${category.toLowerCase()}.png`,
+            ],
+            categoryId: getCategoryId(category),
+        }
     })
 
-    await prisma.product.upsert({
-        where: { slug: "black-angel-tshirt" },
-        update: {},
-        create: {
-            name: "Black Angel T-Shirt",
-            slug: "black-angel-tshirt",
-            description: "Kaos hitam premium Black Angel",
-            price: 150000,
-            images: ["/img/placeholder.jpg"],
-            categoryId: category.id,
-        },
-    })
+    // ===== INSERT PRODUCTS =====
+    for (const product of products) {
+        await prisma.product.upsert({
+            where: { slug: product.slug },
+            update: {},
+            create: product,
+        })
+    }
 
-    await prisma.product.upsert({
-        where: { slug: "white-angel-tshirt" },
-        update: {},
-        create: {
-            name: "White Angel T-Shirt",
-            slug: "white-angel-tshirt",
-            description: "Kaos putih eksklusif Black Angel",
-            price: 145000,
-            images: ["/img/placeholder.jpg"],
-            categoryId: category.id,
-        },
-    })
+    console.log("✅ Seed completed: Admin + Categories + 50 Products")
 }
 
 main()
     .then(() => prisma.$disconnect())
-    .catch(e => {
-        console.error(e)
+    .catch(err => {
+        console.error(err)
         prisma.$disconnect()
         process.exit(1)
     })

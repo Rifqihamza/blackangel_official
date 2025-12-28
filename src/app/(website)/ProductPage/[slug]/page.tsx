@@ -1,3 +1,5 @@
+
+
 "use client"
 
 import useProductSlug from "@/hooks/useProductSlug"
@@ -24,7 +26,7 @@ export default function ProductDetailPage() {
             : "/img/placeholder.jpg"
 
     return (
-        <main className="h-[90vh] max-w-7xl mx-auto py-30 px-6">
+        <main className="w-full h-max max-w-7xl mx-auto py-15">
             {/* BACK BUTTON */}
             <button
                 onClick={() => router.push("/")}
@@ -37,37 +39,37 @@ export default function ProductDetailPage() {
             <div className="grid lg:grid-cols-3 gap-8 relative">
                 {/* LEFT: IMAGE */}
                 <div className="col-span-1">
-                    <div className="relative w-full h-96 bg-gray-100 rounded-xl overflow-hidden">
+                    <div className="relative aspect-square w-auto h-100 bg-gray-100 rounded-xl overflow-hidden">
                         <Image
                             src={imageUrl}
                             alt={product.name}
                             fill
                             loading="eager"
-                            className="object-cover"
+                            className="object-contain"
                         />
                     </div>
                 </div>
 
                 {/* MIDDLE: DETAIL */}
                 <div className="col-span-1">
-                    <p className="text-sm text-gray-500 mb-1">
+                    <p className="text-sm text-(--secondary) mb-1">
                         {product.category?.name}
                     </p>
 
-                    <h1 className="text-2xl font-semibold mb-3">
+                    <h1 className="text-2xl text-(--primary) font-semibold mb-3">
                         {product.name}
                     </h1>
 
-                    <p className="text-3xl font-bold text-secondary mb-5">
+                    <p className="text-3xl text-(--secondary) font-bold mb-5">
                         Rp {product.price.toLocaleString("id-ID")}
                     </p>
 
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-(--accent) leading-relaxed">
                         {product.description}
                     </p>
-                    <div className="mt-2">
+                    <div className="mt-8">
                         <button
-                            className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border border-secondary rounded text-secondary hover:text-white hover:bg-secondary duration-300 cursor-pointer"
+                            className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border rounded-xl text-(--secondary) hover:text-white hover:bg-(--accent) duration-300 cursor-pointer"
                         >
                             Make It Yours
                             <ShoppingBag />
