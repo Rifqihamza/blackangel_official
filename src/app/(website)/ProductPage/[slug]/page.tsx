@@ -5,7 +5,7 @@
 
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
-import { useProductSlug } from "@/hooks/productsHook"
+import { useProductSlug } from "@/features/products/hookProducts"
 import { ArrowLeft, ShoppingBag } from "lucide-react"
 import SkeletonComponent from "@/components/SkeletonComponent/SkeletonComponent"
 

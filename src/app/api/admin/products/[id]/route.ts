@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/requireAdmin";
-import { updateProductSchema } from "@/lib/validators/product.schema";
+import { prisma } from "@/server/prisma";
+import { requireAdmin } from "@/server/requireAdmin";
+import { updateProductSchema } from "@/schemas/product.schema";
 import { z } from "zod";
 
 const idSchema = z.coerce.number().positive();

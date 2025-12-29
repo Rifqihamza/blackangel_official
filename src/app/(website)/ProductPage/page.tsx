@@ -2,8 +2,8 @@
 'use client'
 
 import { useState } from "react"
-import { useProducts } from "@/hooks/productsHook"
-import { useCategories } from "@/hooks/categoriesHook"
+import { useProducts } from "@/features/products/hookProducts"
+import { useCategories } from "@/features/categories"
 import ProductCard from "@/components/ProductCard/ProductCard"
 
 export default function ProductPage() {

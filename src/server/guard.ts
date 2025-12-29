@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { logger } from "@/lib/logger";
+import { logger } from "@/server/logger";
 
 /* =========================
    Base session helper

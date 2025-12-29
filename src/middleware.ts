@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { logger } from "@/lib/logger";
+import { logger } from "@/server/logger";
 
 const PUBLIC_PATHS = ["/_next", "/favicon.ico", "/public"];
 const LOGIN_PATH = "/dashboard/login";

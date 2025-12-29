@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { paginationQuerySchema } from "@/lib/validators/pagination.schema";
+import { prisma } from "@/server/prisma";
+import { paginationQuerySchema } from "@/schemas/pagination.schema";
 import { Prisma } from "@prisma/client";
-import { withRateLimit, apiRateLimitOptions } from "@/lib/rateLimit";
+import { withRateLimit, apiRateLimitOptions } from "@/server/rateLimit";
 
 async function handler(req: Request) {
     try {

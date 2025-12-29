@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useCategories } from '@/hooks/categoriesHook'
-import { useAdminProducts } from '@/hooks/dashboardHook'
-import { useAddProduct, useUpdateProduct, useDeleteProduct } from '@/hooks/productsHook'
+import { useCategories } from '@/features/categories'
+import { useAdminProducts } from '@/features/dashboard'
+import { useAddProduct, useUpdateProduct, useDeleteProduct } from '@/features/products/hookProducts'
 import { Product, ProductCreateData, ProductUpdateData } from '@/types/product'
 import { AddProductForm, ProductCard, EditProductModal, DeleteProductModal } from '@/components/ProductManagement'
 
