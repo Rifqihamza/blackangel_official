@@ -2,16 +2,15 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Package, Tags } from 'lucide-react'
+import { LayoutDashboard, Package } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const menus = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Products', href: '/dashboard/products', icon: Package },
-    { name: 'Categories', href: '/dashboard/categories', icon: Tags },
 ]
 
-export const AdminSideBar = () => {
+export default function SidebarDashboard() {
     const pathname = usePathname()
 
     return (
@@ -53,4 +52,3 @@ export const AdminSideBar = () => {
     )
 }
 
-export default AdminSideBar

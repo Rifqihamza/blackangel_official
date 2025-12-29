@@ -9,12 +9,10 @@ export default async function AppLayout({
 }) {
 
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body className="antialised">
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
   );
 }

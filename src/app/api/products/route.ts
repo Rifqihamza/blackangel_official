@@ -1,36 +1,37 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { paginationQuerySchema } from "@/lib/validators/pagination.schema";
+import { Prisma } from "@prisma/client";
+import { withRateLimit, apiRateLimitOptions } from "@/lib/rateLimit";
 
-export async function GET(req: Request) {
+async function handler(req: Request) {
     try {
-        const { searchParams } = new URL(req.url)
+        const parsed = paginationQuerySchema.safeParse(
+            Object.fromEntries(new URL(req.url).searchParams)
+        );
 
-        const page = Number(searchParams.get("page") ?? 1)
-        const limit = Number(searchParams.get("limit") ?? 8)
-        const search = searchParams.get("search") ?? ""
-        const filterActive = searchParams.get("filterActive") ?? "active" // Default to active for public
-        const categoryId = searchParams.get("categoryId") ?? ""
-        const skip = (page - 1) * limit
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: parsed.error.flatten() },
+                { status: 400 }
+            );
+        }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const where: { [key: string]: any } = {}
+        const { page, limit, search, filterActive, categoryId } = parsed.data;
+        const skip = (page - 1) * limit;
+
+        const where: Prisma.ProductWhereInput = {};
 
         if (search) {
-            where.name = {
-                contains: search,
-                mode: 'insensitive'
-            }
+            where.name = { contains: search, mode: "insensitive" };
         }
 
-        if (filterActive === "active") {
-            where.isActive = true
-        } else if (filterActive === "inactive") {
-            where.isActive = false
+        if (filterActive !== "all") {
+            where.isActive = filterActive === "active";
         }
-        // For 'all', no isActive filter
 
         if (categoryId) {
-            where.categoryId = parseInt(categoryId)
+            where.categoryId = categoryId;
         }
 
         const [products, total] = await Promise.all([
@@ -41,10 +42,8 @@ export async function GET(req: Request) {
                 skip,
                 take: limit,
             }),
-            prisma.product.count({
-                where,
-            }),
-        ])
+            prisma.product.count({ where }),
+        ]);
 
         return NextResponse.json({
             data: products,
@@ -54,13 +53,11 @@ export async function GET(req: Request) {
                 total,
                 totalPages: Math.ceil(total / limit),
             },
-        })
+        });
     } catch (error) {
-        console.error("PRODUCT API ERROR:", error)
-
-        return NextResponse.json(
-            { message: "Internal Server Error" },
-            { status: 500 }
-        )
+        console.error("PRODUCT API ERROR:", error);
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }
+
+export const GET = withRateLimit(handler, apiRateLimitOptions);

@@ -2,8 +2,8 @@
 'use client'
 
 import { useState } from "react"
-import useProducts from "@/hooks/useProducts"
-import useCategories from "@/hooks/useCategories"
+import { useProducts } from "@/hooks/productsHook"
+import { useCategories } from "@/hooks/categoriesHook"
 import ProductCard from "@/components/ProductCard/ProductCard"
 
 export default function ProductPage() {
@@ -11,7 +11,7 @@ export default function ProductPage() {
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("")
 
-    const { products, totalPages, loading } = useProducts(page, 8, searchTerm, "active", selectedCategory)
+    const { products, totalPages, loading } = useProducts(page, 12, searchTerm, "active", selectedCategory)
     const { categories } = useCategories()
 
     const handleSearchChange = (value: string) => {
@@ -53,13 +53,13 @@ export default function ProductPage() {
             </div>
 
             {loading ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className="skeleton bg-gray-300 h-72 rounded-xl" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6">
+                    {Array.from({ length: 12 }).map((_, i) => (
+                        <div key={i} className="skeleton bg-gray-300 h-64 sm:h-72 md:h-80 lg:h-96 rounded-xl" />
                     ))}
                 </div>
             ) : (
-                <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                     {products.map(product => (
                         <ProductCard key={product.id} product={product} />
                     ))}

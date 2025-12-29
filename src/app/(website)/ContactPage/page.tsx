@@ -10,7 +10,7 @@ export default function ContactPage() {
                     Reach Us
                 </h1>
 
-                <div className="flex flex-col md:flex-row gap-10 bg-white rounded-3xl shadow-xl p-6 md:p-12">
+                <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14">
 
                     {/* ===== LEFT : FORM ===== */}
                     <div className="flex-3">

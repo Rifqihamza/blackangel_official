@@ -4,12 +4,12 @@ import Link from "next/link"
 
 export default function HomePage() {
     return (
-        <section id="homePage" className="w-full min-h-screen py-6">
+        <section id="homePage" className="w-full">
             {/* CONTAINER */}
             <div className="px-4 sm:px-6 space-y-6 container mx-auto">
 
                 {/* ===== HERO GRID ===== */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 
                     {/* LEFT TEXT */}
                     <div className="bg-white shadow-xl rounded-3xl p-6 md:p-10 flex flex-col justify-between">

@@ -1,31 +1,60 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { logger } from "@/lib/logger";
+
+const PUBLIC_PATHS = ["/_next", "/favicon.ico", "/public"];
+const LOGIN_PATH = "/dashboard/login";
+const DASHBOARD_PATH = "/dashboard";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    // Jangan proteksi assets/public
-    if (pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico")) {
+    /* ===== Skip public/static assets ===== */
+    if (PUBLIC_PATHS.some(path => pathname.startsWith(path))) {
         return NextResponse.next();
     }
 
-    // Ambil token dari NextAuth JWT
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    /* ===== Auth token ===== */
+    const token = await getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+    });
 
-    // Proteksi dashboard kecuali login
-    if (pathname.startsWith("/dashboard") && pathname !== "/dashboard/login") {
+    /* ===== Protect dashboard (ADMIN only) ===== */
+    const isDashboard = pathname.startsWith(DASHBOARD_PATH);
+    const isLoginPage = pathname === LOGIN_PATH;
+
+    if (isDashboard && !isLoginPage) {
         if (!token || token.role !== "ADMIN") {
-            return NextResponse.redirect(new URL("/dashboard/login", req.url));
+            logger.security("Unauthorized dashboard access", req, {
+                path: pathname,
+                tokenPresent: Boolean(token),
+                tokenRole: token?.role,
+            });
+
+            return NextResponse.redirect(new URL(LOGIN_PATH, req.url));
         }
     }
 
-    // Redirect jika sudah login ke login page
-    if (pathname === "/dashboard/login" && token?.role === "ADMIN") {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+    /* ===== Redirect logged-in admin from login page ===== */
+    if (isLoginPage && token?.role === "ADMIN") {
+        return NextResponse.redirect(new URL(DASHBOARD_PATH, req.url));
     }
 
-    return NextResponse.next();
+    /* ===== Basic header anomaly check ===== */
+    const suspiciousHeaders = ["x-host"];
+
+    const detectedHeaders = suspiciousHeaders.filter(h =>
+        req.headers.has(h)
+    );
+
+    if (detectedHeaders.length > 0) {
+        logger.security("Suspicious headers detected", req, {
+            headers: detectedHeaders,
+        });
+
+        return new NextResponse(null, { status: 400 });
+    }
 }
 
 export const config = {

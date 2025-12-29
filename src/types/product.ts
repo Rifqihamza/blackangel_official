@@ -13,3 +13,28 @@ export type Product = {
         name: string
     }
 }
+
+export type Category = {
+    id: number
+    name: string
+}
+
+export type ProductCreateData = {
+    name: string
+    slug: string
+    description: string
+    price: number
+    images: string[]
+    categoryId: number
+    isActive: boolean
+}
+
+export type ProductUpdateData = {
+    name: string
+    slug: string
+    description: string
+    price: number
+    images: FileList | null
+    categoryId: number
+    isActive: boolean
+}

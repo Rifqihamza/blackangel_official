@@ -1,10 +1,10 @@
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-import AdminHeader from '@/components/AdminComponent/AdminHeader'
-import AdminSideBar from '@/components/AdminComponent/AdminSidebar'
-import DashboardClientProvider from '@/components/AdminComponent/AdminSessionProvider'
+import SidebarDashboard from '@/components/DashboardComponent/SidebarDashboard'
+import HeaderDashboard from '@/components/DashboardComponent/HeaderDashboard'
+import SessionDashboard from '@/components/DashboardComponent/SessionDashboard'
 
 export default async function DashboardLayout({
     children,
@@ -19,12 +19,12 @@ export default async function DashboardLayout({
 
     return (
         <div className="min-h-screen flex">
-            <AdminSideBar />
+            <SidebarDashboard />
             <div className="ml-64 flex flex-col w-full">
-                <AdminHeader />
+                <HeaderDashboard />
                 <main className="p-6 bg-gray-50 min-h-[calc(100vh-4rem)]">
                     {/* wrap children dengan client-side SessionProvider */}
-                    <DashboardClientProvider>{children}</DashboardClientProvider>
+                    <SessionDashboard>{children}</SessionDashboard>
                 </main>
             </div>
         </div>

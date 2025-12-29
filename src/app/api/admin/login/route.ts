@@ -1,41 +1,11 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import bcrypt from "bcrypt"
-
-export async function POST(req: Request) {
-    const { email, password } = await req.json()
-
-    const user = await prisma.users.findUnique({
-        where: { email }
+// This route is deprecated - authentication now handled by NextAuth.js
+// Keeping for backward compatibility, but redirecting to NextAuth
+export async function POST() {
+    return new Response(JSON.stringify({
+        error: "Authentication endpoint deprecated. Use NextAuth.",
+        redirect: "/api/auth/signin"
+    }), {
+        status: 410, // Gone
+        headers: { 'Content-Type': 'application/json' }
     })
-
-    if (!user || user.role !== "ADMIN") {
-        return NextResponse.json(
-            { message: "Unauthorized" },
-            { status: 401 }
-        )
-    }
-
-    const isValid = await bcrypt.compare(password, user.password)
-
-    if (!isValid) {
-        return NextResponse.json(
-            { message: "Invalid credentials" },
-            { status: 401 }
-        )
-    }
-
-    const res = NextResponse.json({ success: true })
-    const isProduction = process.env.NODE_ENV === "production"
-
-    res.cookies.set({
-        name: "admin_token",
-        value: String(user.id), // simpan userId
-        httpOnly: true,
-        path: "/",
-        sameSite: "lax",
-        secure: isProduction
-    })
-
-    return res
 }

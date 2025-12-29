@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react"
 
-export function useAdminLogout() {
+export default function useAdminLogout() {
     const logout = async () => {
         await signOut({ callbackUrl: "/dashboard/login" })
     }

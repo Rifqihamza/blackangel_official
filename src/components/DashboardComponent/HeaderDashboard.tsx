@@ -1,8 +1,8 @@
 'use client'
 
-import { useAdminLogout } from '@/hooks/useAdminLogout'
+import { useAdminLogout } from '@/hooks/dashboardHook/useAdminLogout'
 
-export const AdminHeader = () => {
+export default function HeaderDashboard() {
     const { logout } = useAdminLogout()
 
     return (
@@ -16,5 +16,3 @@ export const AdminHeader = () => {
         </header>
     )
 }
-
-export default AdminHeader

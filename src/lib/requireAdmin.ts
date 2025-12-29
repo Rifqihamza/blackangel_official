@@ -1,11 +1,12 @@
-import { headers } from "next/headers"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 export async function requireAdmin() {
-    const headerList = headers()
-    const adminKey = (await headerList).get("x-admin-key")
+    const session = await getServerSession(authOptions)
 
-    if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
+    if (!session || session.user.role !== 'ADMIN') {
         throw new Error("Unauthorized")
     }
+
     return true
 }

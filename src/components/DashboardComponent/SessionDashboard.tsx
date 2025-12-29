@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import { SessionProvider } from 'next-auth/react'
 
-export default function DashboardClientProvider({
+export default function SessionDashboard({
     children,
 }: {
     children: ReactNode

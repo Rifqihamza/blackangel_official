@@ -1,4 +1,4 @@
-export default function ProductDetailSkeleton() {
+export default function SkeletonComponent() {
     return (
         <main className="h-[90vh] max-w-7xl mx-auto py-30 px-6 animate-pulse">
             {/* Back button */}

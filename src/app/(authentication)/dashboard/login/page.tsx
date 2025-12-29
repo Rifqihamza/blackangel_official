@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { useAdminLogin } from "@/hooks/useAdminLogin";
+import { useAdminLogin } from "@/hooks/dashboardHook/useAdminLogin";
 import { ArrowRight } from "lucide-react";
 export default function AdminLoginPage() {
     const { login, loading, error } = useAdminLogin()
@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
         <main className="min-h-screen flex items-center justify-center">
             <form
                 onSubmit={handleSubmit}
-                className="bg-(--primary)/10 py-8 px-7 rounded-xl shadow w-full max-w-2xl space-y-6"
+                className="py-8 px-7 rounded-xl w-full max-w-2xl space-y-6"
             >
                 <div className="mb-6 text-(--primary)">
                     <h1 className="text-3xl font-bold font-serif ">
@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="cursor-pointer w-full bg-(--primary) text-white flex items-center justify-center hover:text-(--accent) hover:bg-(--secondary) shadow duration-300 py-2 rounded-lg disabled:opacity-50"
+                        className="cursor-pointer w-full bg-(--primary) text-white flex items-center justify-center hover:text-(--primary) hover:bg-(--accent) shadow duration-300 py-2 rounded-lg disabled:opacity-50"
                     >
                         {loading ? <span className="loading"></span> : <span className="flex flex-row items-center gap-1">Sign In <ArrowRight size={15} /></span>}
                     </button>

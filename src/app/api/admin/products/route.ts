@@ -1,50 +1,60 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/requireAdmin";
-import { z } from "zod"
+import { createProductSchema } from "@/lib/validators/product.schema";
+import { paginationQuerySchema } from "@/lib/validators/pagination.schema";
+import { withRateLimit, apiRateLimitOptions } from "@/lib/rateLimit";
+import { Prisma } from "@prisma/client";
 
-export async function GET() {
-    try {
-        await requireAdmin()
+async function handler(req: Request) {
+    await requireAdmin();
 
-        const products = await prisma.product.findMany({
-            include: { category: true },
-            orderBy: { createdAt: "desc" }
-        })
+    if (req.method === "GET") {
+        const parsed = paginationQuerySchema.safeParse(
+            Object.fromEntries(new URL(req.url).searchParams)
+        );
 
-        return NextResponse.json(products)
-    } catch {
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: parsed.error.flatten() },
+                { status: 400 }
+            );
+        }
+
+        const { page, limit, search, filterActive, categoryId } = parsed.data;
+        const skip = (page - 1) * limit;
+
+        const where: Prisma.ProductWhereInput = {};
+
+        if (search) where.name = { contains: search, mode: "insensitive" };
+        if (filterActive !== "all") where.isActive = filterActive === "active";
+        if (categoryId) where.categoryId = categoryId;
+
+        const [products, total] = await Promise.all([
+            prisma.product.findMany({
+                where,
+                include: { category: true },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: limit,
+            }),
+            prisma.product.count({ where }),
+        ]);
+
+        return NextResponse.json({
+            data: products,
+            meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+        });
     }
+
+    if (req.method === "POST") {
+        const body = createProductSchema.parse(await req.json());
+        const product = await prisma.product.create({ data: body });
+        return NextResponse.json(product, { status: 201 });
+    }
+
+    return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
 }
 
-const createProductSchema = z.object({
-    name: z.string().min(2),
-    slug: z.string(),
-    description: z.string().optional(),
-    price: z.number().positive(),
-    images: z.array(z.string()),
-    categoryId: z.number(),
-})
-
-export async function POST(req: Request) {
-    try {
-        await requireAdmin()
-
-        const body = await req.json()
-        const data = createProductSchema.parse(body)
-
-        const product = await prisma.product.create({
-            data: {
-                ...data,
-                images: data.images,
-            },
-        })
-        return NextResponse.json(product, { status: 201 })
-    } catch (err) {
-        return NextResponse.json(
-            { message: "Invalid Request", detail: String(err) },
-            { status: 400 }
-        )
-    }
-}
+export const GET = withRateLimit(handler, apiRateLimitOptions);
+export const POST = withRateLimit(handler, apiRateLimitOptions);

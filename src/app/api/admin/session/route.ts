@@ -1,27 +1,11 @@
-import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-
+// This route is deprecated - session management now handled by NextAuth.js
+// Keeping for backward compatibility
 export async function GET() {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("admin_token")?.value
-
-    if (!token) {
-        return NextResponse.json({ admin: null }, { status: 401 })
-    }
-
-    const admin = await prisma.users.findUnique({
-        where: { id: token },
-        select: {
-            id: true,
-            name: true,
-            role: true,
-        },
+    return new Response(JSON.stringify({
+        error: "Session endpoint deprecated. Use NextAuth session.",
+        redirect: "/api/auth/session"
+    }), {
+        status: 410, // Gone
+        headers: { 'Content-Type': 'application/json' }
     })
-
-    if (!admin || admin.role !== "ADMIN") {
-        return NextResponse.json({ admin: null }, { status: 401 })
-    }
-
-    return NextResponse.json({ admin })
 }

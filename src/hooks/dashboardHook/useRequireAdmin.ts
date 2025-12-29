@@ -3,9 +3,9 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAdminSession } from "./useAdminSession"
+import { useAdminSession } from "../authHook/useAdminSession"
 
-export function useRequireAdmin() {
+export default function useRequireAdmin() {
     const router = useRouter()
     const { isAdmin, isLoading } = useAdminSession()
 

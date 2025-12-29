@@ -2,18 +2,19 @@
 
 "use client"
 
-import useProductSlug from "@/hooks/useProductSlug"
+
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
+import { useProductSlug } from "@/hooks/productsHook"
 import { ArrowLeft, ShoppingBag } from "lucide-react"
-import ProductDetailSkeleton from "@/components/ProductDetailSkeleton/ProductDetailSkeleton"
+import SkeletonComponent from "@/components/SkeletonComponent/SkeletonComponent"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
     const router = useRouter()
     const { product, loading, error } = useProductSlug(slug)
 
-    if (loading) return <ProductDetailSkeleton />
+    if (loading) return <SkeletonComponent />
     if (error || !product) return <p className="text-center py-10">Product Not Found</p>
 
     const images: string[] = Array.isArray(product.images)
