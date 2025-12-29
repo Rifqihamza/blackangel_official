@@ -3,11 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/server/prisma";
 import bcrypt from "bcrypt";
-<<<<<<< HEAD
-import { withRateLimit, authRateLimitOptions } from "@/server/rateLimit";
-=======
 import { withRateLimit, authRateLimitOptions } from "@/lib/rateLimit";
->>>>>>> 970c784 (huge update)
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),

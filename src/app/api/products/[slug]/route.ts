@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-<<<<<<< HEAD
-import { prisma } from "@/server/prisma";
-=======
 import { prisma } from "@/lib/prisma";
->>>>>>> 970c784 (huge update)
 import { z } from "zod";
 
 const slugSchema = z.object({

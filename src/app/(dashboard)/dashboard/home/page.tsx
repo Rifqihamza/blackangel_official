@@ -13,11 +13,7 @@ import {
     TrendingUp
 } from "lucide-react"
 import { useSession } from "next-auth/react"
-<<<<<<< HEAD
-import { useDashboardStats } from "@/features/dashboard"
-=======
 import { useDashboardStats } from "@/hooks/dashboardHook"
->>>>>>> 970c784 (huge update)
 import { MetricCard, ActivityItem, LoadingSkeleton, ErrorState } from "@/components/DashboardComponent"
 
 export default function AdminHomePage() {
