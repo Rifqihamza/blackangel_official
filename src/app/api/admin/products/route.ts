@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { prisma } from "@/server/prisma";
 import { requireAdmin } from "@/server/requireAdmin";
 import { createProductSchema } from "@/schemas/product.schema";
 import { paginationQuerySchema } from "@/schemas/pagination.schema";
 import { withRateLimit, apiRateLimitOptions } from "@/server/rateLimit";
+=======
+import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/requireAdmin";
+import { createProductSchema } from "@/lib/validators/product.schema";
+import { paginationQuerySchema } from "@/lib/validators/pagination.schema";
+import { withRateLimit, apiRateLimitOptions } from "@/lib/rateLimit";
+>>>>>>> 970c784 (huge update)
 import { Prisma } from "@prisma/client";
 
 async function handler(req: Request) {

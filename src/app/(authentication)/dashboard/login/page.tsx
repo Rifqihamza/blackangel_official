@@ -1,7 +1,11 @@
 'use client'
 
 import { useState } from "react";
+<<<<<<< HEAD
 import { useAdminLogin } from "@/features/dashboard/useAdminLogin";
+=======
+import { useAdminLogin } from "@/hooks/dashboardHook/useAdminLogin";
+>>>>>>> 970c784 (huge update)
 import { ArrowRight } from "lucide-react";
 export default function AdminLoginPage() {
     const { login, loading, error } = useAdminLogin()

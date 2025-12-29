@@ -5,7 +5,11 @@
 
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
+<<<<<<< HEAD
 import { useProductSlug } from "@/features/products/hookProducts"
+=======
+import { useProductSlug } from "@/hooks/productsHook"
+>>>>>>> 970c784 (huge update)
 import { ArrowLeft, ShoppingBag } from "lucide-react"
 import SkeletonComponent from "@/components/SkeletonComponent/SkeletonComponent"
 
