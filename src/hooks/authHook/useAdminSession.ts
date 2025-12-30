@@ -1,27 +1,27 @@
-'use client'
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+"use client"
 
-interface ExtendedUser {
-    id: string;
-    email: string;
-    name: string | null;
-    role: "USER" | "ADMIN";
-}
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
-export default function useAdminSession() {
-    const { data: session, status } = useSession();
-    const router = useRouter();
+export function useAdminSession() {
+    const { data: session, status } = useSession()
+    const router = useRouter()
 
-    const isLoading = status === "loading";
-    const isAdmin = (session?.user as ExtendedUser)?.role === "ADMIN";
+    const isLoading = status === "loading"
+    const isAuthenticated = status === "authenticated"
+    const isAdmin = session?.user?.role === "ADMIN"
 
     useEffect(() => {
-        if (!isLoading && !isAdmin) {
-            router.replace("/dashboard/login");
+        if (!isLoading && (!isAuthenticated || !isAdmin)) {
+            router.replace("/dashboard/login")
         }
-    }, [isLoading, isAdmin, router]);
+    }, [isLoading, isAuthenticated, isAdmin, router])
 
-    return { session, isLoading, isAdmin };
+    return {
+        session,
+        isLoading,
+        isAuthenticated,
+        isAdmin,
+    }
 }

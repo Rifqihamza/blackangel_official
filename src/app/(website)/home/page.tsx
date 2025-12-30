@@ -20,7 +20,7 @@ export default function HomePage() {
                                 Now!
                             </h1>
 
-                            <p className="max-w-md text-(--primary)/50 text-sm leading-relaxed">
+                            <p className="max-w-md text-(--accent) text-sm leading-relaxed">
                                 Discover the latest trends & express your style effortlessly.
                                 Shop exclusive collections with premium designs, just for you.
                             </p>

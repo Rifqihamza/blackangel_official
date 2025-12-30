@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Product } from '@/types/product'
 
-export default function useAdminProducts(page = 1, limit = 12, search = "", filterActive = "all") {
+export default function useProducts(page = 1, limit = 8) {
     const [products, setProducts] = useState<Product[]>([])
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(true)
@@ -15,14 +15,10 @@ export default function useAdminProducts(page = 1, limit = 12, search = "", filt
         const fetchProducts = async () => {
             setLoading(true)
             try {
-                const params = new URLSearchParams({
-                    page: page.toString(),
-                    limit: limit.toString(),
-                    search,
-                    filterActive
-                })
+                const res = await fetch(
+                    `/api/products?page=${page}&limit=${limit}`
+                )
 
-                const res = await fetch(`/api/admin/products?${params}`)
                 if (!res.ok) throw new Error("Failed to fetch products")
                 const json = await res.json()
                 setProducts(json.data)
@@ -34,9 +30,7 @@ export default function useAdminProducts(page = 1, limit = 12, search = "", filt
             }
         }
         fetchProducts()
-    }, [page, limit, search, filterActive, refresh])
-
-    const refetch = () => setRefresh(r => r + 1)
+    }, [page, limit])
 
     return { products, totalPages, loading, error, refetch }
 }

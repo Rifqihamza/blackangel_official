@@ -1,15 +1,14 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/server/prisma";
-import bcrypt from "bcrypt";
-import { withRateLimit, authRateLimitOptions } from "@/lib/rateLimit";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
+import bcrypt from "bcrypt"
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
 
     session: {
-        strategy: "jwt",
+        strategy: "jwt"
     },
 
     providers: [
@@ -17,73 +16,60 @@ export const authOptions: NextAuthOptions = {
             name: "Credentials",
             credentials: {
                 email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" },
+                password: { label: "Password", type: "password" }
             },
-
-            async authorize(credentials) {
-                try {
-                    if (!credentials?.email || !credentials?.password) {
-                        return null;
-                    }
-
-                    const user = await prisma.users.findUnique({
-                        where: { email: credentials.email },
-                    });
-
-                    if (!user) return null;
-
-                    const isValid = await bcrypt.compare(
-                        credentials.password,
-                        user.password
-                    );
-
-                    if (!isValid) return null;
-
-                    // 🔒 normalize Prisma nullable field
-                    return {
-                        id: String(user.id),
-                        email: user.email,
-                        name: user.name ?? "",
-                        role: user.role,
-                    };
-                } catch (error) {
-                    console.error("Authorize error:", error);
+            authorize: async (credentials) => {
+                if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-            },
-        }),
+
+                const user = await prisma.users.findUnique({
+                    where: { email: credentials.email }
+                });
+
+                if (!user) {
+                    return null;
+                }
+
+                const isValidPassword = await bcrypt.compare(credentials.password, user.password);
+
+                if (!isValidPassword) {
+                    return null;
+                }
+
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role
+                };
+            }
+        })
     ],
 
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
-                token.email = user.email;
-                token.name = user.name;
-                token.role = user.role;
+                token.id = user.id
+                token.name = user.name
+                token.email = user.email
+                token.role = user.role
             }
-            return token;
+            return token
         },
 
         async session({ session, token }) {
-            if (session.user) {
-                session.user.id = token.id;
-                session.user.email = token.email;
-                session.user.name = token.name;
-                session.user.role = token.role;
+            session.user = {
+                id: token.id as string,
+                name: token.name as string,
+                email: token.email as string,
+                role: token.role as "ADMIN" | "USER",
             }
-            return session;
-        },
-    },
+            return session
+        }
+    }
 
-    pages: {
-        signIn: "/dashboard/login",
-        error: "/dashboard/login",
-    },
-};
+}
 
-const handler = NextAuth(authOptions);
-
-// ✅ RATE LIMITED AUTH ENDPOINTS
-export const GET = withRateLimit(handler, authRateLimitOptions);
-export const POST = withRateLimit(handler, authRateLimitOptions);
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }

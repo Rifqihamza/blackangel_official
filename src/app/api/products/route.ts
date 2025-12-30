@@ -6,44 +6,24 @@ import { withRateLimit, apiRateLimitOptions } from "@/lib/rateLimit";
 
 async function handler(req: Request) {
     try {
-        const parsed = paginationQuerySchema.safeParse(
-            Object.fromEntries(new URL(req.url).searchParams)
-        );
+        const { searchParams } = new URL(req.url)
 
-        if (!parsed.success) {
-            return NextResponse.json(
-                { error: parsed.error.flatten() },
-                { status: 400 }
-            );
-        }
-
-        const { page, limit, search, filterActive, categoryId } = parsed.data;
-        const skip = (page - 1) * limit;
-
-        const where: Prisma.ProductWhereInput = {};
-
-        if (search) {
-            where.name = { contains: search, mode: "insensitive" };
-        }
-
-        if (filterActive !== "all") {
-            where.isActive = filterActive === "active";
-        }
-
-        if (categoryId) {
-            where.categoryId = categoryId;
-        }
+        const page = Number(searchParams.get("page") ?? 1)
+        const limit = Number(searchParams.get("limit") ?? 8)
+        const skip = (page - 1) * limit
 
         const [products, total] = await Promise.all([
             prisma.product.findMany({
-                where,
+                where: { isActive: true },
                 include: { category: true },
-                orderBy: { createdAt: "asc" },
+                orderBy: { createdAt: "desc" },
                 skip,
                 take: limit,
             }),
-            prisma.product.count({ where }),
-        ]);
+            prisma.product.count({
+                where: { isActive: true },
+            }),
+        ])
 
         return NextResponse.json({
             data: products,
