@@ -1,32 +1,30 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcrypt"
-import { loginSchema } from "@/lib/schemas/auth.schema"
+import { adminLoginSchema } from "@/schemas/auth.schema"
+import type { NextAuthOptions } from "next-auth"
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
-    session: {
-        strategy: "jwt",
-    },
+    session: { strategy: "jwt" },
+
     providers: [
-        CredentialsProvider({
-            name: "credentials",
+        Credentials({
+            name: "Admin Credentials",
+            credentials: {},
             async authorize(credentials) {
-                const parsed = loginSchema.safeParse(credentials)
+                const parsed = adminLoginSchema.safeParse(credentials)
                 if (!parsed.success) return null
 
                 const { email, password } = parsed.data
 
-                const user = await prisma.users.findUnique({
-                    where: { email },
-                })
-
+                const user = await prisma.users.findUnique({ where: { email } })
                 if (!user) return null
+                if (user.role !== "ADMIN") return null
 
-                const isValid = await bcrypt.compare(password, user.password)
-                if (!isValid) return null
+                const valid = await bcrypt.compare(password, user.password)
+                if (!valid) return null
 
                 return {
                     id: user.id,
@@ -37,6 +35,7 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+
     callbacks: {
         jwt({ token, user }) {
             if (user) {
@@ -52,5 +51,3 @@ export const authOptions: NextAuthOptions = {
         },
     },
 }
-
-export const handler = NextAuth(authOptions)
