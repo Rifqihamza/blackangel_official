@@ -1,13 +1,10 @@
+'use client'
 
-
-"use client"
-
-
-import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
-import { useProductSlug } from "@/hooks/productsHook"
+import { useProductSlug } from "@/hooks/products/useProductSlug"
 import { ArrowLeft, ShoppingBag } from "lucide-react"
 import SkeletonComponent from "@/components/SkeletonComponent/SkeletonComponent"
+import Image from "next/image"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
@@ -17,18 +14,10 @@ export default function ProductDetailPage() {
     if (loading) return <SkeletonComponent />
     if (error || !product) return <p className="text-center py-10">Product Not Found</p>
 
-    const images: string[] = Array.isArray(product.images)
-        ? product.images
-        : JSON.parse(String(product.images ?? "[]"))
-
-    const imageUrl =
-        typeof images?.[0] === "string" && images[0].startsWith("/")
-            ? images[0]
-            : "/img/placeholder.jpg"
+    const imageUrl = product.images[0] ?? "/img/placeholder.jpg"
 
     return (
         <main className="w-full h-max max-w-7xl mx-auto py-15">
-            {/* BACK BUTTON */}
             <button
                 onClick={() => router.push("/")}
                 className="cursor-pointer flex items-center gap-2 mb-6 hover:opacity-70 transition"
@@ -36,22 +25,18 @@ export default function ProductDetailPage() {
                 <ArrowLeft size={20} /> Back Home
             </button>
 
-            {/* === GRID PRODUK === */}
             <div className="grid lg:grid-cols-3 gap-8 relative">
-                {/* LEFT: IMAGE */}
                 <div className="col-span-1">
                     <div className="relative aspect-square w-auto h-100 bg-gray-100 rounded-xl overflow-hidden">
                         <Image
                             src={imageUrl}
                             alt={product.name}
                             fill
-                            loading="eager"
                             className="object-contain"
                         />
                     </div>
                 </div>
 
-                {/* MIDDLE: DETAIL */}
                 <div className="col-span-1">
                     <p className="text-sm text-(--secondary) mb-1">
                         {product.category?.name}
@@ -68,12 +53,10 @@ export default function ProductDetailPage() {
                     <p className="text-(--accent) leading-relaxed">
                         {product.description}
                     </p>
+
                     <div className="mt-8">
-                        <button
-                            className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border rounded-xl text-(--secondary) hover:text-white hover:bg-(--accent) duration-300 cursor-pointer"
-                        >
-                            Make It Yours
-                            <ShoppingBag />
+                        <button className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border rounded-xl text-(--secondary) hover:text-white hover:bg-(--accent)">
+                            Make It Yours <ShoppingBag />
                         </button>
                     </div>
                 </div>
