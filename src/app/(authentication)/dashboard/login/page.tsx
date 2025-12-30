@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react";
-import { useAdminLogin } from "@/hooks/useAdminLogin";
-import { ArrowRight, ClipboardPen } from "lucide-react";
-import Loading from "@/app/(website)/ProductPage/loading";
+import useAdminLogin from "@/hooks/dashboardHook/useAdminLogin";
+import { ArrowRight } from "lucide-react";
+
 export default function AdminLoginPage() {
     const { login, loading, error } = useAdminLogin()
     const [email, setEmail] = useState("")
@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
                         disabled={loading}
                         className="cursor-pointer w-full bg-primary-content text-primary flex items-center justify-center hover:text-primary-content hover:bg-primary/20 shadow duration-300 py-2 rounded-lg disabled:opacity-50"
                     >
-                        {loading ? <span className="animate-spin"><Loading /></span> : <span className="flex flex-row items-center gap-1">Sign In <ArrowRight size={15} /></span>}
+                        {loading ? "Loading..." : <span className="flex flex-row items-center gap-1">Sign In <ArrowRight size={15} /></span>}
                     </button>
                 </div>
             </form>

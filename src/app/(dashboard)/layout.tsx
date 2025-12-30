@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import AdminSideBar from "@/components/AdminComponent/AdminComponent"
-import AdminHeader from "@/components/AdminComponent/AdminComponent"
+import AdminSideBar from "@/components/DashboardComponent/AdminComponent"
+import AdminHeader from "@/components/DashboardComponent/AdminComponent"
 
 export default async function DashboardLayout({
     children,

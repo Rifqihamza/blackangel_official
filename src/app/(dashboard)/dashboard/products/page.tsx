@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from "react"
 import { Product } from "@/types/product"
+import { EditProductModal, DeleteProductModal } from "@/components/ProductManagement"
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState(true)
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+    const [deletingProduct, setDeletingProduct] = useState<Product | null>(null)
+    const [categories] = useState([])
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -27,6 +33,20 @@ export default function AdminProductsPage() {
         }
         fetchProducts()
     }, [])
+
+    const handleEditSubmit = async () => {
+        // Implement edit logic
+        setEditModalOpen(false)
+        setEditingProduct(null)
+    }
+
+    const handleDeleteConfirm = async () => {
+        if (deletingProduct) {
+            // Implement delete logic
+            setDeleteModalOpen(false)
+            setDeletingProduct(null)
+        }
+    }
 
     if (loading) return <p>Loading...</p>
 
