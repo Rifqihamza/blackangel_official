@@ -4,7 +4,9 @@ import bcrypt from "bcrypt"
 const prisma = new PrismaClient()
 
 async function main() {
-    // ===== ADMIN USER =====
+    // =========================
+    // ADMIN USER
+    // =========================
     const hashedPassword = await bcrypt.hash("1tm1tr4101101", 10)
 
     await prisma.users.upsert({
@@ -18,9 +20,13 @@ async function main() {
         },
     })
 
-    // ===== CATEGORIES =====
+    // =========================
+    // CATEGORIES
+    // =========================
+    const categoryNames = ["T-Shirt", "Jacket", "Hoodie", "Pants"]
+
     const categories = await Promise.all(
-        ["T-Shirt", "Jacket", "Hoodie", "Pants"].map(name =>
+        categoryNames.map(name =>
             prisma.category.upsert({
                 where: { name },
                 update: {},
@@ -29,48 +35,59 @@ async function main() {
         )
     )
 
-    // Helper
     const getCategoryId = (name: string) =>
         categories.find(c => c.name === name)!.id
 
-    // ===== PRODUCTS DATA (50 ITEMS) =====
+    // =========================
+    // PRODUCTS
+    // =========================
     const products = Array.from({ length: 50 }).map((_, i) => {
         const index = i + 1
         const category =
-            i % 4 === 0 ? "T-Shirt" :
-                i % 4 === 1 ? "Jacket" :
-                    i % 4 === 2 ? "Hoodie" :
-                        "Pants"
+            i % 4 === 0
+                ? "T-Shirt"
+                : i % 4 === 1
+                    ? "Jacket"
+                    : i % 4 === 2
+                        ? "Hoodie"
+                        : "Pants"
+
+        const categorySlug = category.toLowerCase().replace(/\s+/g, "-")
 
         return {
             name: `Black Angel ${category} ${index}`,
-            slug: `black-angel-${category.toLowerCase()}-${index}`,
-            description: `Premium ${category.toLowerCase()} Black Angel edition ${index}`,
-            price: 120000 + (i * 5000),
+            slug: `black-angel-${categorySlug}-${index}`,
+            description: `Premium ${categorySlug} Black Angel edition ${index}`,
+            price: 120_000 + i * 5_000,
             images: [
-                `/img/${category.toLowerCase()}.png`,
-                `/img/${category.toLowerCase()}.png`,
-            ],
+                `/img/${categorySlug}.png`,
+                `/img/${categorySlug}.png`,
+            ] as unknown as any, // memastikan JSON
+            isActive: true,
             categoryId: getCategoryId(category),
         }
     })
 
-    // ===== INSERT PRODUCTS =====
-    for (const product of products) {
-        await prisma.product.upsert({
-            where: { slug: product.slug },
-            update: {},
-            create: product,
-        })
-    }
+    // =========================
+    // INSERT PRODUCTS
+    // =========================
+    await Promise.all(
+        products.map(product =>
+            prisma.product.upsert({
+                where: { slug: product.slug },
+                update: {},
+                create: product,
+            })
+        )
+    )
 
-    console.log("✅ Seed completed: Admin + Categories + 50 Products")
+    console.log("✅ Seed completed: Admin, Categories, 50 Products")
 }
 
 main()
     .then(() => prisma.$disconnect())
     .catch(err => {
-        console.error(err)
+        console.error("❌ Seed error:", err)
         prisma.$disconnect()
         process.exit(1)
     })

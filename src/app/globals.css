@@ -1,13 +1,15 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default, light --prefersdark, cupcake;
-}
+@plugin "daisyui";
 
 :root {
-  --primary: #72442b; /* lebih deep & elegan (main text / headline) */
-  --secondary: #5a3a28; /* hangat, masih satu keluarga dengan primary */
-  --muted: #a78973; /* muted yang beneran “background-friendly” */
-  --accent: #8f5b3a; /* accent lebih hidup tapi gak terlalu orange */
+  --primary: #72442b;
+  --secondary: #5a3a28;
+  --muted: #a78973;
+  --accent: #8f5b3a;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 @font-face {
@@ -31,6 +33,6 @@
 
 body {
   font-family: Poppins;
-  background-color: var(--bg-main);
+  background-color: rgb(250, 250, 250);
   color: black;
 }

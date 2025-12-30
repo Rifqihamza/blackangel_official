@@ -16,7 +16,7 @@ export default function Navbar() {
                     <div className="flex-1" />
 
                     {/* Center Logo */}
-                    <div className="flex-2 md:flex-1 text-center">
+                    <div className="text-center w-full">
                         <div className="flex items-center justify-center">
                             <Image src="/img/icon.png" alt="Icon of black Angel" width={60} height={60} />
                             <h1 className="md:text-3xl text-2xl font-[Tangerine] font-semibold tracking-widest">

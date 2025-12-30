@@ -7,7 +7,7 @@ export const authOptions: NextAuthOptions = {
     session: { strategy: "jwt" },
     providers: [
         CredentialsProvider({
-            name: "Admin Login",
+            name: "Credentials",
             credentials: {
                 email: {},
                 password: {},
@@ -38,17 +38,22 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        jwt({ token, user }) {
+        async jwt({ token, user }) {
             if (user) {
                 token.role = user.role
             }
             return token
         },
-        session({ session, token }) {
+        async session({ session, token }) {
             if (session.user) {
                 session.user.role = token.role
             }
             return session
         },
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith(baseUrl)) return url
+            return baseUrl
+        },
     },
+    pages: { signIn: "/login" }
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(req: Request) {
@@ -12,7 +13,7 @@ export async function GET(req: Request) {
     const skip = (page - 1) * limit
 
     try {
-        const where: any = {
+        const where: Prisma.ProductWhereInput = {
             isActive: true,
         }
 

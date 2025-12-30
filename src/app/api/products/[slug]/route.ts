@@ -1,17 +1,28 @@
-import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { NextResponse } from "next/server"
 
 export async function GET(
-    _: Request,
-    { params }: { params: { slug: string } }
+    _req: Request,
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        const product = await prisma.product.findUnique({
+        const { slug } = await params
+
+        if (!slug) {
+            return NextResponse.json(
+                { message: "Slug is required" },
+                { status: 400 }
+            )
+        }
+
+        const product = await prisma.product.findFirst({
             where: {
-                slug: params.slug,
+                slug,
                 isActive: true,
             },
-            include: { category: true },
+            include: {
+                category: true,
+            },
         })
 
         if (!product) {
@@ -23,9 +34,9 @@ export async function GET(
 
         return NextResponse.json(product)
     } catch (error) {
-        console.error(error)
+        console.error("GET PRODUCT ERROR:", error)
         return NextResponse.json(
-            { message: "Failed to fetch product" },
+            { message: "Internal server error" },
             { status: 500 }
         )
     }

@@ -12,7 +12,7 @@ export default function ProductDetailPage() {
     const { product, loading, error } = useProductSlug(slug)
 
     if (loading) return <SkeletonComponent />
-    if (error || !product) return <p className="text-center py-10">Product Not Found</p>
+    if (error || !product) return <p className="w-full h-[50vh] flex items-center justify-center">Product Not Found</p>
 
     const imageUrl = product.images[0] ?? "/img/placeholder.jpg"
 

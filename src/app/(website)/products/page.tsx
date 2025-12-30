@@ -41,9 +41,8 @@ export default function ProductPage() {
                                 key={i}
                                 disabled={loading}
                                 onClick={() => setPage(i + 1)}
-                                className={`
-                                  join-item btn border-none
-                                  ${isActive
+                                className={`join-item btn border-none
+                                    ${isActive
                                         ? "bg-(--secondary) text-white"
                                         : "bg-(--primary) text-black hover:bg-(--secondary)"
                                     }
