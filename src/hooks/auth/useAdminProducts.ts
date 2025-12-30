@@ -1,4 +1,4 @@
-import { useProducts } from "./useProducts"
+import { useProducts } from "../products/useProducts"
 
 export function useAdminProducts() {
     return useProducts()

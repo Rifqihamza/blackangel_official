@@ -1,22 +1,28 @@
-export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url)
-    const page = Number(searchParams.get("page") ?? 1)
-    const limit = 8
+import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
+
+export async function GET(req: NextRequest) {
+    const page = Number(req.nextUrl.searchParams.get("page") ?? 1)
+    const limit = 12
     const skip = (page - 1) * limit
 
-    const [data, total] = await Promise.all([
+    const [products, totalItems] = await Promise.all([
         prisma.product.findMany({
             where: { isActive: true },
             include: { category: true },
+            orderBy: { createdAt: "desc" },
             skip,
             take: limit,
-            orderBy: { createdAt: "desc" },
         }),
-        prisma.product.count({ where: { isActive: true } }),
+        prisma.product.count({
+            where: { isActive: true },
+        }),
     ])
 
-    return Response.json({
-        data,
-        meta: { page, total, totalPages: Math.ceil(total / limit) },
+    return NextResponse.json({
+        products,
+        page,
+        totalPages: Math.ceil(totalItems / limit),
+        totalItems,
     })
 }
