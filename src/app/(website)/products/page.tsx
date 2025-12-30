@@ -6,7 +6,7 @@ import ProductCard from "@/components/ProductCard/ProductCard"
 
 export default function ProductPage() {
     const [page, setPage] = useState(1)
-    const { products, totalPages, loading, error } = useProducts(page)
+    const { products, totalPages, loading, error } = useProducts({ page })
 
     return (
         <section id="collectionPage" className=" mx-auto px-6 py-25">

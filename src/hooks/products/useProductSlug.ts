@@ -1,40 +1,31 @@
-'use client'
+"use client"
 
 import { useEffect, useState } from "react"
 import { Product } from "@/types/product"
 
-export function useProductSlug(slug?: string) {
+export function useProductSlug(slug: string) {
     const [product, setProduct] = useState<Product | null>(null)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         if (!slug) return
 
-        let active = true
-        setLoading(true)
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`/api/products/${slug}`)
+                if (!res.ok) throw new Error()
 
-        fetch(`/api/products/${slug}`)
-            .then(res => {
-                if (!res.ok) throw new Error("Product not found")
-                return res.json()
-            })
-            .then((data: Product) => {
-                if (!active) return
+                const data: Product = await res.json()
                 setProduct(data)
-            })
-            .catch(err => {
-                if (!active) return
-                setError(err.message)
-            })
-            .finally(() => {
-                if (!active) return
+            } catch {
+                setError(true)
+            } finally {
                 setLoading(false)
-            })
-
-        return () => {
-            active = false
+            }
         }
+
+        fetchProduct()
     }, [slug])
 
     return { product, loading, error }

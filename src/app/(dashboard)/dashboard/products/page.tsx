@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import { useAdminProducts } from "@/hooks/dashboard/useAdminProducts"
+import { useAdminProducts } from "@/hooks/dashboard/useAdminCategories"
 import { EditProductModal, DeleteProductModal } from "@/components/ProductManagement"
 import { Product } from "@/types/product"
 
