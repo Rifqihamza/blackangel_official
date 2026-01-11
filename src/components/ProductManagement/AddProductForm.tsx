@@ -1,122 +1,193 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Category } from '@/types/product'
+import { generateSlug } from '@/lib/generateSlug'
+import Image from 'next/image'
 
-interface Category {
-    id: number
-    name: string
-}
-
-interface ProductData {
-    name: string
-    slug: string
-    description: string
-    price: number
-    images: string[]
-    categoryId: number
-    isActive: boolean
-}
-
-interface AddProductFormProps {
+interface Props {
     categories: Category[]
-    onSubmit: (data: ProductData) => Promise<void>
+    onSubmit: (formData: FormData) => Promise<void>
 }
 
-export default function AddProductForm({ categories, onSubmit }: AddProductFormProps) {
+export default function AddProductForm({ categories, onSubmit }: Props) {
     const [form, setForm] = useState({
         name: '',
         slug: '',
         description: '',
         price: '',
-        images: '',
         categoryId: '',
-        isActive: true
+        isActive: true,
+        images: null as FileList | null,
     })
+
+    const [previews, setPreviews] = useState<string[]>([])
+    const urlsRef = useRef<string[]>([])
+
+    useEffect(() => {
+        return () => urlsRef.current.forEach(URL.revokeObjectURL)
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const data = {
-            ...form,
-            price: parseInt(form.price),
-            images: form.images.split(',').map(s => s.trim()).filter(s => s),
-            categoryId: parseInt(form.categoryId)
+
+        const fd = new FormData()
+        Object.entries(form).forEach(([k, v]) => {
+            if (typeof v === 'string' || typeof v === 'boolean') {
+                fd.append(k, String(v))
+            }
+        })
+
+        if (form.images) {
+            Array.from(form.images).forEach(file =>
+                fd.append('images', file)
+            )
         }
-        await onSubmit(data)
-        // Reset form
+
+        await onSubmit(fd)
+
+        urlsRef.current.forEach(URL.revokeObjectURL)
+        urlsRef.current = []
+        setPreviews([])
+
         setForm({
             name: '',
             slug: '',
             description: '',
             price: '',
-            images: '',
             categoryId: '',
-            isActive: true
+            isActive: true,
+            images: null,
         })
     }
 
     return (
-        <div className="mb-6 bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Add New Product</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-lg"
-                />
-                <input
-                    type="text"
-                    placeholder="Slug"
-                    value={form.slug}
-                    onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-lg"
-                />
-                <textarea
-                    placeholder="Description"
-                    value={form.description}
-                    onChange={(e) => setForm({ ...form, description: e.target.value })}
-                    className="px-4 py-2 border border-gray-300 rounded-lg md:col-span-2"
-                />
-                <input
-                    type="number"
-                    placeholder="Price"
-                    value={form.price}
-                    onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-lg"
-                />
-                <select
-                    value={form.categoryId}
-                    onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-lg"
-                >
-                    <option value="">Select Category</option>
-                    {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
-                </select>
-                <input
-                    type="text"
-                    placeholder="Images (comma separated URLs)"
-                    value={form.images}
-                    onChange={(e) => setForm({ ...form, images: e.target.value })}
-                    className="px-4 py-2 border border-gray-300 rounded-lg md:col-span-2"
-                />
-                <label className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={form.isActive}
-                        onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                        className="mr-2"
+        <form
+            onSubmit={handleSubmit}
+            className="bg-white p-5 rounded-xl shadow space-y-4"
+        >
+            <h2 className="font-semibold">Add Product</h2>
+
+            {/* MAIN GRID */}
+            <div className="w-full flex flex-col md:flex-row gap-4">
+                {/* LEFT — FORM */}
+                <div className="space-y-4 w-full">
+                    <div className="grid grid-cols-2 gap-4">
+                        <input
+                            className="px-4 py-2 w-full bg-white shadow-inner shadow-black/30 outline-none rounded-lg"
+                            placeholder="Name"
+                            value={form.name}
+                            onChange={e =>
+                                setForm({
+                                    ...form,
+                                    name: e.target.value,
+                                    slug: generateSlug(e.target.value),
+                                })
+                            }
+                        />
+
+                        <input
+                            placeholder="Slug"
+                            value={form.slug}
+                            onChange={e =>
+                                setForm({
+                                    ...form,
+                                    slug: generateSlug(e.target.value),
+                                })
+                            }
+                            className="px-4 py-2 text-sm w-full rounded-lg bg-white shadow-inner shadow-black/30 outline-none"
+                            required
+                        />
+
+                        <input
+                            type="number"
+                            className="px-4 py-2 w-full bg-white shadow-inner shadow-black/30 outline-none rounded-lg"
+                            placeholder="Price"
+                            value={form.price}
+                            onChange={e =>
+                                setForm({ ...form, price: e.target.value })
+                            }
+                        />
+
+                        <select
+                            className="px-4 py-2 w-full bg-white shadow-inner shadow-black/30 outline-none rounded-lg"
+                            value={form.categoryId}
+                            onChange={e =>
+                                setForm({
+                                    ...form,
+                                    categoryId: e.target.value,
+                                })
+                            }
+                        >
+                            <option value="">Select Category</option>
+                            {categories.map(c => (
+                                <option key={c.id} value={c.id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <textarea
+                        className="resize-none px-4 py-2 w-full bg-white shadow-inner shadow-black/30 outline-none rounded-lg"
+                        placeholder="Description"
+                        value={form.description}
+                        onChange={e =>
+                            setForm({ ...form, description: e.target.value })
+                        }
                     />
-                    Active
-                </label>
-                <button type="submit" className="btn bg-(--primary) text-white hover:bg-(--secondary) md:col-span-2">
-                    Add Product
-                </button>
-            </form>
-        </div>
+
+                    <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className='px-4 py-2 w-full bg-white rounded-lg shadow-inner shadow-black/30 outline-none'
+                        onChange={e => {
+                            const files = e.target.files
+
+                            urlsRef.current.forEach(URL.revokeObjectURL)
+
+                            const urls = files
+                                ? Array.from(files).map(URL.createObjectURL)
+                                : []
+
+                            urlsRef.current = urls
+                            setPreviews(urls)
+                            setForm({ ...form, images: files })
+                        }}
+                    />
+                </div>
+
+                {/* RIGHT — IMAGE PREVIEW */}
+                <div className="w-100 bg-white shadow-inner shadow-black/30 rounded-lg flex flex-col items-center justify-center">
+                    <p className="text-sm font-medium mb-2 text-gray-600">
+                        Image Preview
+                    </p>
+
+                    {previews.length === 0 ? (
+                        <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                            No images selected
+                        </div>
+                    ) : (
+                        <div className="">
+                            {previews.map((src, i) => (
+                                <Image
+                                    key={i}
+                                    src={src}
+                                    alt=""
+                                    width={150}
+                                    height={150}
+                                    className="rounded-lg object-cover w-full h-40"
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <button className="btn bg-(--primary) text-white w-fit">
+                Save
+            </button>
+        </form>
     )
 }

@@ -1,15 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { adminFetch } from "@/lib/adminFetch"
+import { DashboardStats } from "@/types/dashboardStats"
 
 export function useDashboardStats() {
-    const [stats, setStats] = useState<any>(null)
+    const [stats, setStats] = useState<DashboardStats | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch("/api/admin/stats")
-            .then(res => res.json())
+        adminFetch<DashboardStats>("/api/admin/stats")
             .then(setStats)
+            .catch(() => setStats(null))
             .finally(() => setLoading(false))
     }, [])
 

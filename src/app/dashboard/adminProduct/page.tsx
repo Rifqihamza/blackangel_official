@@ -2,39 +2,51 @@
 
 import { useState } from "react"
 import { useAdminProducts } from "@/hooks/dashboard/useAdminProducts"
-import { EditProductModal, DeleteProductModal, ProductCard } from "@/components/ProductManagement"
+import { useAdminCategories } from "@/hooks/dashboard/useAdminCategories"
+import {
+    AddProductForm,
+    EditProductModal,
+    DeleteProductModal,
+    ProductCard
+} from "@/components/ProductManagement"
 import { Product } from "@/types/product"
 
 export default function AdminProducts() {
-    const { products, loading, refetch } = useAdminProducts()
+    const { products, loading, createProduct, updateProduct, deleteProduct } = useAdminProducts()
+    const { categories } = useAdminCategories()
 
     const [editing, setEditing] = useState<Product | null>(null)
     const [deleting, setDeleting] = useState<Product | null>(null)
-
-    if (loading) return <p>Loading...</p>
 
     return (
         <section>
             <h1 className="text-2xl font-semibold mb-4">Manage Products</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {products.map(product => (
-                    <ProductCard
-                        key={product.id}
-                        product={product}
-                        onEdit={() => setEditing(product)}
-                        onDelete={() => setDeleting(product)}
-                    />
-                ))}
+            <AddProductForm categories={categories} onSubmit={createProduct} />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                {loading
+                    ? Array.from({ length: 8 }).map((_, i) => (
+                        <div key={i} className="h-72 bg-gray-200 animate-pulse rounded-xl" />
+                    ))
+                    : products.map(product => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onEdit={() => setEditing(product)}
+                            onDelete={() => setDeleting(product)}
+                        />
+                    ))}
             </div>
 
             <EditProductModal
+                key={editing?.id ?? 'new'}
                 isOpen={!!editing}
                 product={editing}
-                categories={[]}
+                categories={categories}
                 onClose={() => setEditing(null)}
-                onSubmit={async () => {
-                    await refetch()
+                onSubmit={async (fd) => {
+                    await updateProduct(editing!.id, fd)
                     setEditing(null)
                 }}
             />
@@ -44,7 +56,7 @@ export default function AdminProducts() {
                 product={deleting}
                 onClose={() => setDeleting(null)}
                 onConfirm={async () => {
-                    await refetch()
+                    await deleteProduct(deleting!.id)
                     setDeleting(null)
                 }}
             />

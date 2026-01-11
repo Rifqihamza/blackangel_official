@@ -13,7 +13,7 @@ export default async function RootLayout({
 }>) {
     return (
         <html lang="en" data-scroll-behavior="smooth">
-            <body className="antialised">
+            <body>
                 {children}
             </body>
         </html>

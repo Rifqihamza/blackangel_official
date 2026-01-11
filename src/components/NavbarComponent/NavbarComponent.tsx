@@ -38,7 +38,7 @@ export default function Navbar() {
             </header>
 
             {/* Fixed Bottom Navigation - Desktop Only */}
-            <nav className="hidden sm:flex fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg px-1 py-0.5 z-50 items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8 border border-gray-200">
+            <nav className="hidden sm:flex fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg px-1 py-0.5 z-50 items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8">
                 <a href="#homePage" className="hover:opacity-70 transition hover:bg-(--primary) hover:text-white p-4 rounded-full">
                     <Home className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8" strokeWidth={1.5} />
                 </a>

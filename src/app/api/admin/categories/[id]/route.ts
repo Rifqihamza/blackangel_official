@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth"
 
 export async function PUT(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== "ADMIN") {
@@ -13,9 +13,10 @@ export async function PUT(
     }
 
     const body = await req.json()
+    const { id } = await params
 
     const category = await prisma.category.update({
-        where: { id: Number(params.id) },
+        where: { id: Number(id) },
         data: { name: body.name }
     })
 
@@ -24,15 +25,17 @@ export async function PUT(
 
 export async function DELETE(
     _: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== "ADMIN") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    const { id } = await params
+
     await prisma.category.delete({
-        where: { id: Number(params.id) }
+        where: { id: Number(id) }
     })
 
     return NextResponse.json({ success: true })

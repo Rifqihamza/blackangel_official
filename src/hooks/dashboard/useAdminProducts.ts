@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Product } from "@/types/product"
+import { adminFetch } from "@/lib/adminFetch"
 
 export function useAdminProducts() {
     const [products, setProducts] = useState<Product[]>([])
@@ -9,43 +10,42 @@ export function useAdminProducts() {
 
     const fetchProducts = async () => {
         setLoading(true)
-        const res = await fetch("/api/admin/products")
-        const data = await res.json()
-        setProducts(data)
-        setLoading(false)
+        try {
+            const data = await adminFetch<Product[]>("/api/admin/products")
+            setProducts(data)
+        } finally {
+            setLoading(false)
+        }
     }
 
-    const createProduct = async (data: any) => {
+    const createProduct = async (formData: FormData) => {
         await fetch("/api/admin/products", {
             method: "POST",
-            body: JSON.stringify(data),
+            body: formData,
+            credentials: "include",
         })
-        fetchProducts()
+        await fetchProducts()
     }
 
-    const updateProduct = async (id: number, data: any) => {
+    const updateProduct = async (id: number, formData: FormData) => {
         await fetch(`/api/admin/products/${id}`, {
             method: "PUT",
-            body: JSON.stringify(data),
+            body: formData,
+            credentials: "include",
         })
-        fetchProducts()
+        await fetchProducts()
     }
 
     const deleteProduct = async (id: number) => {
-        await fetch(`/api/admin/products/${id}`, { method: "DELETE" })
-        fetchProducts()
+        await adminFetch(`/api/admin/products/${id}`, {
+            method: "DELETE",
+        })
+        await fetchProducts()
     }
 
     useEffect(() => {
         fetchProducts()
     }, [])
 
-    return {
-        products,
-        loading,
-        refetch: fetchProducts,
-        createProduct,
-        updateProduct,
-        deleteProduct,
-    }
+    return { products, loading, createProduct, updateProduct, deleteProduct }
 }

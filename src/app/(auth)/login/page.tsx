@@ -20,16 +20,16 @@ export default function AdminLoginPage() {
     }
 
     return (
-        <main className="bg-(--primary) min-h-screen flex items-center justify-center">
+        <main className="bg-gray-100 min-h-screen flex items-center justify-center">
             <form
                 onSubmit={handleSubmit}
-                className="bg-white py-8 px-7 rounded-xl shadow w-full max-w-xl space-y-6"
+                className="bg-white py-8 px-7 rounded-xl shadow w-full max-w-xs space-y-6"
             >
                 <div className="mb-6 text-(--primary)">
-                    <h1 className="text-3xl font-bold font-serif ">
+                    <h1 className="text-lg md:text-2xl font-bold font-serif ">
                         Welcome Back...
                     </h1>
-                    <p className="text-md">Please enter your email and password.</p>
+                    <p className="text-sm">Please enter your email and password.</p>
 
                 </div>
                 {error && (
@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-2 rounded-lg outline-none border-2 border-(--primary) focus:border-(--accent) focus:ring-4 focus:ring-(--primary)/60 transition"
+                        className="w-full px-4 py-3 outline-none rounded-xl shadow-inner shadow-black/20 text-sm"
                         required
                     />
                     <div className="relative">
@@ -52,19 +52,19 @@ export default function AdminLoginPage() {
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 pr-10 rounded-lg outline-none border-2 border-(--primary) focus:border-(--accent) focus:ring-4 focus:ring-(--primary)/60 transition"
+                            className="w-full px-4 py-3 outline-none rounded-xl shadow-inner shadow-black/20 text-sm"
                             required
                         />
 
                         <button
                             type="button"
                             onClick={onShowHide}
-                            className="absolute top-0 right-0 translate-y-2 -translate-x-3"
+                            className="absolute top-0 right-0 translate-y-3 -translate-x-4"
                         >
                             {isShow ? (
-                                <EyeIcon size={24} />
+                                <EyeIcon size={16} />
                             ) : (
-                                <EyeOff size={24} />
+                                <EyeOff size={16} />
                             )}
                         </button>
                     </div>
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="disable:opacity-50 w-full px-4 py-2 bg-(--primary) text-white hover:bg-(--secondary) transition rounded-lg cursor-pointer flex items-center justify-center"
+                        className="disable:opacity-50 w-full px-4 py-2 bg-(--primary) text-sm text-white hover:bg-(--secondary) transition rounded-lg cursor-pointer flex items-center justify-center"
                     >
                         {loading ? "Loading..." : <span className="flex flex-row items-center gap-1">Sign In <ArrowRight size={15} /></span>}
                     </button>

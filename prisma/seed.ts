@@ -62,7 +62,7 @@ async function main() {
             images: [
                 `/img/${categorySlug}.png`,
                 `/img/${categorySlug}.png`,
-            ] as unknown as any, // memastikan JSON
+            ], // memastikan JSON
             isActive: true,
             categoryId: getCategoryId(category),
         }

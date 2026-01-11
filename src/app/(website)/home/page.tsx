@@ -88,9 +88,9 @@ export default function HomePage() {
                     <div className="aspect-video bg-white shadow-xl rounded-3xl p-6 md:p-10 flex items-center justify-center">
                         <div className="space-y-4 w-full text-center">
                             <h3 className="text-xl md:text-2xl font-semibold text-(--primary)">
-                                Models wearing <br /> full outfits
+                                Discover all <br /> full outfits
                             </h3>
-                            <button className="border border-black px-5 py-2 rounded-full text-sm">
+                            <button className="bg-(--primary) text-white px-5 py-2 rounded-full text-sm hover:bg-(--secondary) transition-colors">
                                 Explore more
                             </button>
                         </div>

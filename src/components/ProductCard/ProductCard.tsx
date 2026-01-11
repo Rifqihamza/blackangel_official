@@ -22,7 +22,7 @@ export default function ProductCard({
             href={`/products/${product.slug}`}
             className="bg-white rounded-xl shadow hover:shadow-lg transition p-4"
         >
-            <div className="relative h-56 rounded-lg overflow-hidden">
+            <div className="relative h-40 rounded-lg overflow-hidden flex items-center justify-center">
                 <Image
                     src={imageUrl}
                     alt={product.name}

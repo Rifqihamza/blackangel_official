@@ -25,7 +25,7 @@ export default async function DashboardLayout({
                 <div className="flex-1 flex flex-col">
                     {/* Header */}
                     <header className="bg-white [box-shadow:2px_1px_0px_1px_#eaeaea] h-16 flex items-center justify-end px-6 sticky top-0 z-10">
-                        <h2 className="text-2xl font-semibold">Hello, {session?.user.name}👋🏻</h2>
+                        <h2 className="text-md font-semibold">Hello, Welcome {session?.user.name}👋🏻</h2>
                     </header>
 
                     {/* Page content */}

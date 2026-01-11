@@ -25,10 +25,12 @@ export const useAdminLogin = () => {
         })
 
         if (res?.error) {
-            setError(res.error)
-            router.push("/dashboard")
+            setError(res.error || "Email atau Password Salah!")
+            setLoading(false)
+            return
         }
 
+        router.push("/dashboard")
         setLoading(false)
         return res
     }

@@ -2,7 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-
+  serverExternalPackages: ['cloudinary'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      }
+    ]
+  },
   // Security headers
   async headers() {
     return [
@@ -58,10 +66,6 @@ const nextConfig: NextConfig = {
   // Additional security settings
   poweredByHeader: false,
 
-  // Experimental features for security
-  experimental: {
-    serverComponentsExternalPackages: []
-  }
 };
 
 export default nextConfig;

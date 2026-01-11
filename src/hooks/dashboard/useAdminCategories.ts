@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { adminFetch } from "@/lib/adminFetch"
 
 export type Category = {
     id: number
@@ -12,15 +13,17 @@ export function useAdminCategories() {
     const [loading, setLoading] = useState(true)
 
     const fetchCategories = async () => {
-        setLoading(true)
-        const res = await fetch("/api/admin/categories")
-        const data = await res.json()
-        setCategories(data)
-        setLoading(false)
+        try {
+            setLoading(true)
+            const data = await adminFetch<Category[]>("/api/admin/categories")
+            setCategories(data)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const createCategory = async (name: string) => {
-        await fetch("/api/admin/categories", {
+        await adminFetch("/api/admin/categories", {
             method: "POST",
             body: JSON.stringify({ name }),
         })
@@ -28,7 +31,7 @@ export function useAdminCategories() {
     }
 
     const updateCategory = async (id: number, name: string) => {
-        await fetch(`/api/admin/categories/${id}`, {
+        await adminFetch(`/api/admin/categories/${id}`, {
             method: "PUT",
             body: JSON.stringify({ name }),
         })
@@ -36,7 +39,7 @@ export function useAdminCategories() {
     }
 
     const deleteCategory = async (id: number) => {
-        await fetch(`/api/admin/categories/${id}`, {
+        await adminFetch(`/api/admin/categories/${id}`, {
             method: "DELETE",
         })
         await fetchCategories()
@@ -49,9 +52,9 @@ export function useAdminCategories() {
     return {
         categories,
         loading,
+        refetch: fetchCategories,
         createCategory,
         updateCategory,
         deleteCategory,
-        refetch: fetchCategories
     }
 }

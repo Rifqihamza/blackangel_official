@@ -58,7 +58,7 @@ model Product {
   slug        String   @unique
   description String?
   price       Int
-  images      Json
+  images      String[]
   isActive    Boolean  @default(true)
   categoryId  Int
   createdAt   DateTime @default(now())
