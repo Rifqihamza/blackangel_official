@@ -1,13 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
-}
-
-:root {
-  --primary: #72442b;
-  --secondary: #5a3a28;
-  --muted: #a78973;
-  --accent: #8f5b3a;
+  themes: light --default, light --preferdark;
 }
 
 @font-face {
@@ -25,8 +18,15 @@
   src: url("/Tangerine.ttf");
 }
 
+:root {
+  --primary: #72442b;
+  --secondary: #5a3a28;
+  --muted: #a78973;
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: Poppins;
-  background: white;
-  color: black;
+  background: var(--base-100);
+  color: theme("colors.neutral.800");
 }

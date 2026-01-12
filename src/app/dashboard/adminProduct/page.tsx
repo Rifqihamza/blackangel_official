@@ -19,15 +19,24 @@ export default function AdminProducts() {
     const [deleting, setDeleting] = useState<Product | null>(null)
 
     return (
-        <section>
-            <h1 className="text-2xl font-semibold mb-4">Manage Products</h1>
+        <section className="space-y-6">
+            <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-base-content">Manage Products</h1>
+                <div className="badge badge-primary badge-lg">
+                    {products.length} Products
+                </div>
+            </div>
 
-            <AddProductForm categories={categories} onSubmit={createProduct} />
+            <div className="card bg-base-100 shadow-xl border border-base-300">
+                <div className="card-body">
+                    <AddProductForm categories={categories} onSubmit={createProduct} />
+                </div>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {loading
                     ? Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className="h-72 bg-gray-200 animate-pulse rounded-xl" />
+                        <div key={i} className="skeleton h-72 rounded-box"></div>
                     ))
                     : products.map(product => (
                         <ProductCard
@@ -39,6 +48,7 @@ export default function AdminProducts() {
                     ))}
             </div>
 
+            {/* Modals */}
             <EditProductModal
                 key={editing?.id ?? 'new'}
                 isOpen={!!editing}

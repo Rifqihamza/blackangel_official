@@ -4,17 +4,19 @@ interface MetricCardProps {
     title: string
     value: string
     icon: React.ReactNode
+    bgColor: string
+    borderColor: string
     color: string
     trend: string
     trendLabel: string
 }
 
-export default function MetricCard({ title, value, icon, color, trend, trendLabel }: MetricCardProps) {
+export default function MetricCard({ title, value, icon, bgColor, borderColor, color, trend, trendLabel }: MetricCardProps) {
     return (
-        <div className="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
+        <div className={`${bgColor} rounded-xl shadow-sm ${borderColor} p-6 hover:shadow-md transition-shadow`}>
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-sm font-medium text-gray-600">{title}</p>
+                    <p className="text-sm font-medium text-gray-700">{title}</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
                     <div className="flex items-center gap-1 mt-2">
                         <TrendingUp className="w-3 h-3 text-green-500" />

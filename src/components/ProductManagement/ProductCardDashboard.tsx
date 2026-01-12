@@ -30,7 +30,7 @@ export default function ProductCard({ product, onEdit, onDelete }: ProductCardPr
                 <h3 className="font-semibold text-(--primary)">
                     {product.name}
                 </h3>
-                <p className="text-sm text-(--secondary) line-clamp-2">
+                <p className="text-sm text-(--secondary) truncate">
                     {product.description}
                 </p>
                 <p className="mt-2 font-bold">

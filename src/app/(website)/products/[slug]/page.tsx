@@ -2,62 +2,126 @@
 
 import { useParams, useRouter } from "next/navigation"
 import { useProductSlug } from "@/hooks/products/useProductSlug"
-import { ArrowLeft, ShoppingBag } from "lucide-react"
+import { ArrowLeft, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react"
 import SkeletonComponent from "@/components/SkeletonComponent/SkeletonComponent"
 import Image from "next/image"
+import { useState } from "react"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
     const router = useRouter()
     const { product, loading, error } = useProductSlug(slug)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
     if (loading) return <SkeletonComponent />
-    if (error || !product) return <p className="w-full h-[50vh] flex items-center justify-center">Product Not Found</p>
+    if (error || !product) {
+        return (
+            <main className="min-h-screen bg-base-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <h1 className="text-3xl font-bold text-error mb-2">Product Not Found</h1>
+                    <p className="text-neutral-600">The product you`re looking for doesn`t exist.</p>
+                </div>
+            </main>
+        )
+    }
 
-    const imageUrl = product.images[0] ?? "/img/placeholder.jpg"
+    const imageUrl = product.images[currentImageIndex] ?? "/img/placeholder.jpg"
+
+    const nextImage = () => {
+        setCurrentImageIndex((prev) => (prev + 1) % product.images.length)
+    }
+
+    const prevImage = () => {
+        setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length)
+    }
 
     return (
-        <main className="w-full h-max max-w-7xl mx-auto py-15">
-            <button
-                onClick={() => router.push("/")}
-                className="cursor-pointer flex items-center gap-2 mb-6 hover:opacity-70 transition"
-            >
-                <ArrowLeft size={20} /> Back Home
-            </button>
+        <main className="w-full h-max max-w-6xl mx-auto py-15">
+            <div className="container mx-auto px-4">
+                <button
+                    onClick={() => router.push("/")}
+                    className="flex flex-row items-center justify-center gap-2 hover:text-gray-500 transition cursor-pointer mb-6"
+                >
+                    <ArrowLeft size={20} /> Back Home
+                </button>
 
-            <div className="grid lg:grid-cols-3 gap-8 relative">
-                <div className="col-span-1">
-                    <div className="relative aspect-square w-auto h-100 bg-gray-100 rounded-xl overflow-hidden">
-                        <Image
-                            src={imageUrl}
-                            alt={product.name}
-                            fill
-                            className="object-contain"
-                        />
+                <div className="flex flex-col md:flex-row justify-center gap-5 relative">
+                    <div className="w-fit h-full">
+                        <figure className="aspect-square w-100 h-100 flex items-center justify-center bg-gray-50 rounded-xl shadow-xl relative">
+                            <Image
+                                src={imageUrl}
+                                alt={product.name}
+                                width={300}
+                                height={300}
+                                className="object-contain p-5"
+                            />
+                            {product.images.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={prevImage}
+                                        className="absolute left-2 top-1/2 transform -translate-y-1/2 border-none text-gray-400 hover:text-gray-600 transition cursor-pointer"
+                                    >
+                                        <ChevronLeft size={30} />
+                                    </button>
+                                    <button
+                                        onClick={nextImage}
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 border-none text-gray-400 hover:text-gray-600 transition cursor-pointer"
+                                    >
+                                        <ChevronRight size={30} />
+                                    </button>
+                                </>
+                            )}
+                        </figure>
+
+                        {product.images.length > 1 && (
+                            <div className="flex gap-2 mt-4">
+                                {product.images.map((img, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentImageIndex(index)}
+                                        className={`w-16 h-16 rounded-lg overflow-hidden border-2 ${index === currentImageIndex ? 'border-(--primary)/40' : 'border-gray-100'
+                                            }`}
+                                    >
+                                        <Image
+                                            src={img || "/img/placeholder.jpg"}
+                                            alt={`${product.name} ${index + 1}`}
+                                            width={64}
+                                            height={64}
+                                            className="object-cover w-full h-full"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                </div>
 
-                <div className="col-span-1">
-                    <p className="text-sm text-(--secondary) mb-1">
-                        {product.category?.name}
-                    </p>
+                    <div className="w-full">
 
-                    <h1 className="text-2xl text-(--primary) font-semibold mb-3">
-                        {product.name}
-                    </h1>
+                        <div className="card-body">
+                            <div className="badge badge-outline mb-2">
+                                {product.category?.name}
+                            </div>
 
-                    <p className="text-3xl text-(--secondary) font-bold mb-5">
-                        Rp {product.price.toLocaleString("id-ID")}
-                    </p>
+                            <h1 className="card-title text-3xl text-(--primary) mb-3">
+                                {product.name}
+                            </h1>
 
-                    <p className="text-(--accent) leading-relaxed">
-                        {product.description}
-                    </p>
+                            <div className="text-4xl font-bold text-(--secondary) mb-5">
+                                Rp {product.price.toLocaleString("id-ID")}
+                            </div>
 
-                    <div className="mt-8">
-                        <button className="flex flex-row items-center justify-center gap-2 font-semibold tracking-wider px-4 py-2 border rounded-xl text-(--secondary) hover:text-white hover:bg-(--accent)">
-                            Make It Yours <ShoppingBag />
-                        </button>
+                            <p className="text-neutral-600 leading-relaxed mb-6">
+                                {product.description}
+                            </p>
+
+                            <div className="card-actions justify-start">
+                                <button className="btn border-2 border-(--primary) rounded-xl text-(--primary) hover:bg-(--primary) hover:text-white transition">
+                                    <ShoppingBag size={20} />
+                                    Make It Yours
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

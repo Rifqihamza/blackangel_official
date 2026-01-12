@@ -21,7 +21,7 @@ export default function NavigationDashboard() {
         <div className="flex h-screen sticky top-0 left-0">
             {/* Sidebar */}
             <aside
-                className={`bg-white shadow-md flex flex-col transition-all duration-300 ${sidebarOpen ? "w-64" : "w-16"
+                className={`bg-white shadow-md flex flex-col transition-all duration-300 ${sidebarOpen ? "w-60" : "w-16"
                     }`}
             >
                 {/* Logo & Toggle */}
@@ -48,14 +48,14 @@ export default function NavigationDashboard() {
                     {/* Toggle Button selalu terlihat */}
                     <button
                         onClick={() => setSidebarOpen(!sidebarOpen)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-2 rounded hover:bg-gray-200 transition"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-2 rounded hover:bg-gray-200 transition"
                     >
-                        <Menu size={26} />
+                        <Menu size={20} />
                     </button>
                 </div>
 
                 {/* Menu */}
-                <nav className={`flex-1 mt-4 space-y-2 ${sidebarOpen ? "px-4" : "px-1.5"} transition-all duration-300`}>
+                <nav className={`flex-1 mt-4 space-y-4 ${sidebarOpen ? "px-4" : "px-1.5"} transition-all duration-300`}>
                     {menus.map((menu) => {
                         const Icon = menu.icon
                         const active = pathname === menu.href

@@ -60,9 +60,9 @@ async function main() {
             description: `Premium ${categorySlug} Black Angel edition ${index}`,
             price: 120_000 + i * 5_000,
             images: [
+                `/img/products/${categorySlug}.png`,
                 `/img/${categorySlug}.png`,
-                `/img/${categorySlug}.png`,
-            ], // memastikan JSON
+            ], // array of image URLs
             isActive: true,
             categoryId: getCategoryId(category),
         }
@@ -75,7 +75,7 @@ async function main() {
         products.map(product =>
             prisma.product.upsert({
                 where: { slug: product.slug },
-                update: {},
+                update: product,
                 create: product,
             })
         )

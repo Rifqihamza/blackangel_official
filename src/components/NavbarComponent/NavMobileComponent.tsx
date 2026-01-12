@@ -52,10 +52,10 @@ export default function NavMobileComponent({
                         <NavItem href="#homePage" onClick={onClose}>
                             Home
                         </NavItem>
-                        <NavItem href="#productPage" onClick={onClose}>
+                        <NavItem href="#collectionPage" onClick={onClose}>
                             Collection
                         </NavItem>
-                        <NavItem href="#contactPage" onClick={onClose}>
+                        <NavItem href="#conciergePage" onClick={onClose}>
                             Concierge
                         </NavItem>
                     </nav>

@@ -8,15 +8,19 @@ export default function AdminHome() {
     const { data: session } = useSession()
 
     return (
-        <section className="space-y-8 p-6">
+        <section className="space-y-8">
             {/* Banner */}
-            <div className="bg-linear-to-r from-(--primary) to-(--muted) flex flex-col items-start justify-center w-full h-50 p-6 rounded-xl shadow-md">
-                <h1 className="text-3xl md:text-4xl font-bold text-white">
-                    Welcome back, {session?.user?.name}
-                </h1>
-                <p className="text-white/80 mt-2">
-                    Here`s a quick overview of your store performance.
-                </p>
+            <div className="py-6 px-4 bg-linear-to-r from-(--primary) to-(--muted) text-white rounded-xl">
+                <div className="hero-content">
+                    <div className="w-full">
+                        <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                            Welcome back, {session?.user?.name}👋🏻
+                        </h1>
+                        <p className="text-primary-content/80">
+                            Here`s a quick overview of your store performance.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             {/* Metrics */}
@@ -25,7 +29,9 @@ export default function AdminHome() {
                     title="Total Products"
                     value="120"
                     icon={<Shirt size={24} />}
-                    color="bg-blue-500"
+                    bgColor="bg-info/10"
+                    borderColor="border-2 border-info"
+                    color="bg-info"
                     trend="+12%"
                     trendLabel="from last month"
                 />
@@ -33,7 +39,9 @@ export default function AdminHome() {
                     title="Categories"
                     value="8"
                     icon={<Folder size={24} />}
-                    color="bg-green-500"
+                    bgColor="bg-success/10"
+                    borderColor="border-2 border-success"
+                    color="bg-success"
                     trend="+2"
                     trendLabel="new categories"
                 />
@@ -41,7 +49,9 @@ export default function AdminHome() {
                     title="Orders"
                     value="120"
                     icon={<Package size={24} />}
-                    color="bg-purple-500"
+                    bgColor="bg-warning/10"
+                    borderColor="border-2 border-warning"
+                    color="bg-warning"
                     trend="+25%"
                     trendLabel="from last week"
                 />

@@ -10,47 +10,77 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="w-full max-w-7xl mx-auto rounded-2xl z-50 py-4 px-2 transition-all duration-300">
-                <div className="flex flex-row-reverse md:flex-row items-center justify-between">
-                    {/* Left spacer */}
-                    <div className="flex-1" />
+            {/* --- TOP NAVBAR --- */}
+            <header className="sticky top-0 left-0 mb-8 z-50">
+                <nav className="navbar w-full mx-auto bg-white shadow">
+
+                    {/* Mobile Menu Button (Left) */}
+                    <div className="navbar-start">
+                        <div className="lg:hidden">
+                            <button
+                                onClick={() => setOpen(true)}
+                                className="btn btn-ghost btn-circle hover:bg-primary/10 transition-colors"
+                                aria-label="Open Menu"
+                            >
+                                <Menu size={24} />
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Center Logo */}
-                    <div className="text-center w-full">
-                        <div className="flex items-center justify-center">
-                            <Image src="/img/icon.png" alt="Icon of black Angel" width={60} height={60} />
-                            <h1 className="md:text-3xl text-2xl font-[Tangerine] font-semibold tracking-widest">
+                    <div className="navbar-center">
+                        <div className="flex items-center gap-3 group cursor-pointer">
+                            <div className="relative">
+                                <Image
+                                    src="/img/icon.png"
+                                    alt="Black Angel Logo"
+                                    width={50}
+                                    height={50}
+                                />
+                            </div>
+                            <h1 className="md:text-3xl text-2xl font-[Tangerine] font-bold tracking-widest text-(--primary)">
                                 Black Angel
                             </h1>
                         </div>
                     </div>
 
-                    {/* Mobile Menu Button - Only on mobile */}
-                    <div className="absolute right-4 sm:hidden">
-                        <button onClick={() => setOpen(true)} className="text-(--primary) hover:shadow-xl duration-400">
-                            <Menu size={24} />
-                        </button>
+                    {/* Right Side (Placeholder for symmetry or CTA) */}
+                    <div className="navbar-end">
+                        <div className="hidden lg:flex px-4">
+                            {/* Anda bisa menambahkan tombol 'Join' atau Jam di sini jika ingin simetris */}
+                        </div>
                     </div>
-                </div>
 
-                {/* Mobile Menu */}
-                <NavMobileComponent open={open} onClose={() => setOpen(false)} />
+                </nav>
             </header>
 
-            {/* Fixed Bottom Navigation - Desktop Only */}
-            <nav className="hidden sm:flex fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg px-1 py-0.5 z-50 items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8">
-                <a href="#homePage" className="hover:opacity-70 transition hover:bg-(--primary) hover:text-white p-4 rounded-full">
-                    <Home className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8" strokeWidth={1.5} />
-                </a>
+            {/* --- MOBILE DRAWER COMPONENT --- */}
+            <NavMobileComponent open={open} onClose={() => setOpen(false)} />
 
-                <a href="#collectionPage" className="hover:opacity-70 transition hover:bg-(--primary) hover:text-white p-4 rounded-full">
-                    <ShoppingBag className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8" strokeWidth={1.5} />
-                </a>
-
-                <a href="#conciergePage" className="hover:opacity-70 transition hover:bg-(--primary) hover:text-white p-4 rounded-full">
-                    <Phone className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 2xl:w-8 2xl:h-8" strokeWidth={1.5} />
-                </a>
+            {/* --- SIDE NAVIGATION (Desktop Only) --- */}
+            <nav className="hidden md:flex fixed left-6 top-1/2 -translate-y-1/2 z-40">
+                <div className="flex flex-col gap-4 p-2 bg-white rounded-2xl shadow-lg">
+                    <NavItem href="#homePage" icon={<Home size={22} />} label="Home" />
+                    <NavItem href="#collectionPage" icon={<ShoppingBag size={22} />} label="Collection" />
+                    <NavItem href="#conciergePage" icon={<Phone size={22} />} label="Concierge" />
+                </div>
             </nav>
         </>
+    )
+}
+
+// Sub-component untuk Side Navigation agar kode lebih bersih
+function NavItem({ href, icon, label }: { href: string, icon: React.ReactElement, label: string }) {
+    return (
+        <a
+            href={href}
+            className="group relative flex items-center justify-center w-12 h-12 rounded-full text-base-content hover:bg-(--primary) hover:text-white transition-all duration-300"
+        >
+            {icon}
+            {/* Tooltip on Hover */}
+            <span className="absolute left-14 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-widest font-sans">
+                {label}
+            </span>
+        </a>
     )
 }

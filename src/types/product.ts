@@ -9,7 +9,7 @@ export type Product = {
     slug: string
     description?: string | null
     price: number
-    images: string[]        // dari Prisma Json
+    images: string[]
     isActive: boolean
     categoryId: number
     category?: Category

@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function HomePage() {
     return (
-        <section id="homePage" className="w-full">
+        <section id="homePage" className="w-full bg-base-100">
             {/* CONTAINER */}
             <div className="px-4 sm:px-6 space-y-6 container mx-auto">
 
@@ -12,7 +12,7 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 
                     {/* LEFT TEXT */}
-                    <div className="bg-white shadow-xl rounded-3xl p-6 md:p-10 flex flex-col justify-between">
+                    <div className="bg-base-100 shadow-inner shadow-black/30 rounded-3xl p-6 md:p-10 flex flex-col justify-between">
                         <div className="space-y-8 md:space-y-14">
                             <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-(--primary)">
                                 Express Your Vibe <br />
@@ -20,19 +20,19 @@ export default function HomePage() {
                                 Now!
                             </h1>
 
-                            <p className="max-w-md text-(--accent) text-sm leading-relaxed">
+                            <p className="max-w-md text-neutral-600 text-sm leading-relaxed">
                                 Discover the latest trends & express your style effortlessly.
                                 Shop exclusive collections with premium designs, just for you.
                             </p>
 
                             <Link
                                 href="#collectionPage"
-                                className="flex items-center gap-3 w-fit"
+                                className="flex items-center gap-1 w-fit"
                             >
-                                <div className="bg-(--primary) text-white px-5 py-2 md:px-6 md:py-3 rounded-full text-sm font-medium">
+                                <div className="btn border-2 border-(--primary) rounded-full text-sm font-medium bg-white">
                                     Shop now
                                 </div>
-                                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-(--primary) ring-4 ring-(--primary) text-(--primary) flex items-center justify-center">
+                                <div className="w-9 h-9 md:w-10 md:h-10 border-2 border-(--primary) rounded-full text-(--primary) flex items-center justify-center bg-white">
                                     <ArrowRight size={26} className="rotate-45" />
                                 </div>
                             </Link>
@@ -49,7 +49,7 @@ export default function HomePage() {
                     </div>
 
                     {/* RIGHT IMAGE */}
-                    <div className="relative bg-white shadow-xl rounded-3xl overflow-hidden aspect-square md:aspect-square">
+                    <div className="relative shadow-xl rounded-3xl overflow-hidden aspect-square md:aspect-square">
                         <Image
                             src="/img/model2.png"
                             alt="Fashion Model"
@@ -65,7 +65,7 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
                     {/* Box 1 */}
-                    <div className="relative aspect-video bg-white shadow-xl rounded-3xl overflow-hidden">
+                    <div className="relative aspect-video bg-base-100 shadow-xl rounded-3xl overflow-hidden">
                         <Image
                             src="/img/model1.png"
                             alt="Model Outfit"
@@ -75,7 +75,7 @@ export default function HomePage() {
                     </div>
 
                     {/* Box 2 */}
-                    <div className="relative aspect-video bg-white shadow-xl rounded-3xl overflow-hidden">
+                    <div className="relative aspect-video bg-base-100 shadow-xl rounded-3xl overflow-hidden">
                         <Image
                             src="/img/clothes.png"
                             alt="Clothes"
@@ -85,14 +85,14 @@ export default function HomePage() {
                     </div>
 
                     {/* Box 3 – CTA */}
-                    <div className="aspect-video bg-white shadow-xl rounded-3xl p-6 md:p-10 flex items-center justify-center">
+                    <div className="aspect-video bg-base-100 shadow-inner shadow-black/30 rounded-3xl p-6 md:p-10 flex items-center justify-center">
                         <div className="space-y-4 w-full text-center">
                             <h3 className="text-xl md:text-2xl font-semibold text-(--primary)">
                                 Discover all <br /> full outfits
                             </h3>
-                            <button className="bg-(--primary) text-white px-5 py-2 rounded-full text-sm hover:bg-(--secondary) transition-colors">
+                            <Link href="#collectionPage" className="btn btn-sm bg-(--primary) text-white rounded-full hover:bg-(--muted) hover:text-white transition-colors">
                                 Explore more
-                            </button>
+                            </Link>
                         </div>
                     </div>
 

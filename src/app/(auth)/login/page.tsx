@@ -20,65 +20,73 @@ export default function AdminLoginPage() {
     }
 
     return (
-        <main className="bg-gray-100 min-h-screen flex items-center justify-center">
-            <form
-                onSubmit={handleSubmit}
-                className="bg-white py-8 px-7 rounded-xl shadow w-full max-w-xs space-y-6"
-            >
-                <div className="mb-6 text-(--primary)">
-                    <h1 className="text-lg md:text-2xl font-bold font-serif ">
-                        Welcome Back...
-                    </h1>
-                    <p className="text-sm">Please enter your email and password.</p>
+        <main className="min-h-screen flex items-center justify-center white">
+            <div className="card bg-white rounded-xl shadow-xl w-full max-w-sm">
+                <form
+                    onSubmit={handleSubmit}
+                    className="card-body space-y-6"
+                >
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-bold text-(--primary) mb-2">
+                            Welcome Back...
+                        </h1>
+                        <p className="text-sm text-(--muted)">Please enter your email and password.</p>
+                    </div>
 
-                </div>
-                {error && (
-                    <p className="mb-4 text-sm text-red-500">
-                        {error}
-                    </p>
-                )}
-                <div className="px-3 space-y-5">
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 outline-none rounded-xl shadow-inner shadow-black/20 text-sm"
-                        required
-                    />
-                    <div className="relative">
+                    {error && (
+                        <div className="alert alert-error">
+                            <span>{error}</span>
+                        </div>
+                    )}
+
+                    <div className="space-y-4">
                         <input
-                            type={isShow ? "text" : "password"}
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 outline-none rounded-xl shadow-inner shadow-black/20 text-sm"
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full h-full px-4 py-2 rounded-lg shadow-inner shadow-black/20 focus:shadow-black/30 outline-none transition"
                             required
                         />
 
-                        <button
-                            type="button"
-                            onClick={onShowHide}
-                            className="absolute top-0 right-0 translate-y-3 -translate-x-4"
-                        >
-                            {isShow ? (
-                                <EyeIcon size={16} />
-                            ) : (
-                                <EyeOff size={16} />
-                            )}
-                        </button>
+                        <div className="relative">
+                            <input
+                                type={isShow ? "text" : "password"}
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full h-full px-4 py-2 rounded-lg shadow-inner shadow-black/20 focus:shadow-black/30 outline-none transition pr-10"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={onShowHide}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 btn btn-ghost btn-circle btn-sm"
+                            >
+                                {isShow ? (
+                                    <EyeIcon size={16} />
+                                ) : (
+                                    <EyeOff size={16} />
+                                )}
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className="mt-4">
+
                     <button
                         type="submit"
                         disabled={loading}
-                        className="disable:opacity-50 w-full px-4 py-2 bg-(--primary) text-sm text-white hover:bg-(--secondary) transition rounded-lg cursor-pointer flex items-center justify-center"
+                        className="px-4 py-2 rounded-xl bg-(--primary) text-white w-full flex flex-row items-center justify-center hover:bg-(--muted) transition cursor-pointer"
                     >
-                        {loading ? "Loading..." : <span className="flex flex-row items-center gap-1">Sign In <ArrowRight size={15} /></span>}
+                        {loading ? (
+                            <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                            <span className="flex flex-row items-center gap-2">
+                                Sign In <ArrowRight size={16} />
+                            </span>
+                        )}
                     </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </main>
     )
 }
